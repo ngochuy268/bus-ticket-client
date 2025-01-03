@@ -140,6 +140,7 @@ export const BookController = (busRoutes, setBusRoutes) => {
         }
             setOpen(false);
             setSearchTriggered(false);
+            setFormData({ name: '', phone: '', guests: '', departure: '', destination: '', departureDate: '', returnDate: '' });
         };
 
     // ------------移動時間を計算する-------------------
