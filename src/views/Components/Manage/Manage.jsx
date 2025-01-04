@@ -69,24 +69,28 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                                 <div className="bus-info-super-wrapper">
                                                     {bookings.map((booking, index) => (
                                                         <div className="bus-info-wrapper" key={index}> 
-                                                            <div className="bus-info">
-                                                                    <img src={require(`../../../images/${booking.bookimg}`)} alt="Bus" className="bus-image" />
-                                                                <div className="bus-details">
-                                                                    <h4 style={{marginBottom: '15px'}}>{booking.bookbusname}</h4>
-                                                                    <h6>{booking.bookbustype}</h6>
-                                                                    <div className="rating">⭐ {booking.bookrate}/10</div>
-                                                                    <p style={{textAlign: 'left', marginTop: '10px'}}>🕒 {booking.bookdeparttime} • {booking.bookdepart}</p>
-                                                                    <p style={{textAlign: 'left'}}>🕒 {booking.bookarrivaltime} • {booking.bookdest}</p>                                                                                           
-                                                                </div> 
-                                                            </div>  
-                                                            <div className="depart-dest-cost-wrapper">
-                                                                    <div className="depart-dest">
-                                                                        <p>
-                                                                        <i className="fa-solid fa-plane-departure"></i> : {booking.departdate} ---- <i className="fa-solid fa-plane-arrival"></i> : {booking.returndate}
-                                                                        </p>                                    
-                                                                    </div>
-                                                                    <h2 style={{textAlign: 'right', fontSize: '25px'}}>💰 {booking.bookcost}￥</h2>       
-                                                            </div>                                                 
+                                                            <div className="bus-info-depart-dest">
+                                                                <div className="bus-info">
+                                                                        <img src={require(`../../../images/${booking.bookimg}`)} alt="Bus" className="bus-image" />
+                                                                    <div className="bus-details">
+                                                                        <h4 style={{marginBottom: '15px'}}>{booking.bookbusname}</h4>
+                                                                        <h6>{booking.bookbustype}</h6>
+                                                                        <div className="rating">⭐ {booking.bookrate}/10</div>
+                                                                        <p style={{textAlign: 'left', marginTop: '10px'}}>🕒 {booking.bookdeparttime} • {booking.bookdepart}</p>
+                                                                        <p style={{textAlign: 'left'}}>🕒 {booking.bookarrivaltime} • {booking.bookdest}</p>                                                                                           
+                                                                    </div> 
+                                                                </div>  
+                                                                <div className="depart-dest-cost-wrapper">
+                                                                        <div className="depart-dest">
+                                                                            <p>
+                                                                            <i className="fa-solid fa-plane-departure"></i> : {booking.departdate}  <br/>
+                                                                            ---- <br/>
+                                                                            <i className="fa-solid fa-plane-arrival"></i> : {booking.returndate}
+                                                                            </p>                                    
+                                                                        </div>
+                                                                        <h2 style={{textAlign: 'right', fontSize: '25px'}}>💰 {booking.bookcost}￥</h2>       
+                                                                </div>        
+                                                            </div>                                             
                                                             <div className="manage-btn">
                                                                 <button className="btn btn-warning" onClick={handleEdit}>修理</button>
                                                                 <button className="btn btn-danger" onClick={() => {setSelectedBookId({ bookid: booking.bookid, busid: booking.busid, bookguest: booking.bookguest }); setOpen(true); }}>削除</button>
