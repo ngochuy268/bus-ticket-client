@@ -1,8 +1,11 @@
 import { useMailController } from "../../../controllers/ContactController";
+import ReCAPTCHA from 'react-google-recaptcha';
+
 
 const Contact = () => {
 
-    const { formData, handleChange, handleSubmit } = useMailController();
+    const { formData, handleChange, handleFormSubmit, handleCaptchaChange, recaptchaRef } = useMailController();
+    
 
     return (
         <>
@@ -12,7 +15,7 @@ const Contact = () => {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12">
-                            <form id="reservation-form" style={{'borderRadius' : '23px'}} name="gs" onSubmit={handleSubmit} role="search">
+                            <form id="reservation-form" style={{'borderRadius' : '23px'}} name="gs" onSubmit={handleFormSubmit} role="search">
                                 <div className="row">
                                     <div className="col-lg-12">                                       
                                         <h4>この<em>フォーム</em>を通じて<em>連絡</em>を取りましょう</h4>
@@ -49,9 +52,17 @@ const Contact = () => {
                                             <label htmlFor="Message" className="form-label">メッセージ</label>
                                             <input type="text" name="message" className="Number"  autoComplete="on" required
                                                 value={formData.message} 
-                                                onChange={handleChange}  />
+                                                onChange={handleChange} />
                                         </fieldset>
                                     </div> 
+                                    <div className="col-lg-12">
+                                        <ReCAPTCHA
+                                            style={{display: 'flex', justifyContent: 'center', marginBottom: '20px'}}
+                                            ref={recaptchaRef}
+                                            sitekey="6LefuK4qAAAAAFSbFowPpF5psik_vqc5k3-nRQ8l" 
+                                            onChange={handleCaptchaChange}                                           
+                                        />
+                                    </div>
                                     <div className="col-lg-12">                        
                                         <fieldset>
                                             <button className="main-button" type="submit">送信</button>
