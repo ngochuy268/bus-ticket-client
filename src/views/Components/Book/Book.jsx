@@ -3,23 +3,30 @@ import { toast } from 'react-toastify';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BookController } from '../../../controllers/BookController';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+
 
 
 const Book = ({busRoutes, setBusRoutes }) => {
 
- const {
+    const {
         handleClickOpen, 
         handleClose, 
         handleChange,
         handleSearch, 
-        handleSubmit, 
         calculateTravelTime, 
         searchTriggered, 
+        selectedBus,
         open, 
         filteredBuses, 
-        formData 
+        formData,
+        handleConfirm,
+        paypalDialogOpen,
+        handlePaypalClose,
+        onPayPalApprove, 
     } = BookController(busRoutes, setBusRoutes);
 
+   
     
     return (
         <>
@@ -228,19 +235,56 @@ const Book = ({busRoutes, setBusRoutes }) => {
                 </div>
             </div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Confirm</DialogTitle>
+                <DialogTitle>確認</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Confirm your reservation?
+                        ご予約を確定しますか?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleSubmit} color="primary">
-                        Yes
+                    <Button onClick={() => handleConfirm()} color="primary">
+                        はい
                     </Button>
                     <Button onClick={handleClose} color="secondary">
-                        No
+                        いいえ
                     </Button>
+                </DialogActions>
+            </Dialog>
+             {/* Dialog PayPal */}
+            <Dialog open={paypalDialogOpen} onClose={handlePaypalClose}>
+                <DialogTitle>PayPalによる支払い</DialogTitle>
+                <DialogContent>
+                <PayPalScriptProvider
+                    options={{
+                    "client-id": "AQyLUzcpJ2lPG0Qta_wocmPXMn-gubCn0olLfigIgkQfX_wXEyFPUgSAn7fP_HJfcezte4hVo8KW4cjY", 
+                    currency: "JPY",
+                    locale: "ja_JP" 
+                    }}
+                >
+                    <PayPalButtons
+                        createOrder={(data, actions) => {
+                            return actions.order.create({
+                            purchase_units: [
+                                {
+                                    amount: {
+                                        value: selectedBus ? selectedBus.cost : "0", 
+                                    },
+                                },
+                            ],
+                            });
+                        }}
+                        onApprove={onPayPalApprove}
+                        onError={(err) => {
+                            console.error("PayPalエラー:", err);
+                            alert("支払い中にエラーが発生しました。もう一度試してください。");
+                        }}
+                    />
+                </PayPalScriptProvider>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={handlePaypalClose} color="secondary">
+                    キャンセル
+                </Button>
                 </DialogActions>
             </Dialog>
         </>

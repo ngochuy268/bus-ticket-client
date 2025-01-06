@@ -163,14 +163,39 @@ export const BookController = (busRoutes, setBusRoutes) => {
         return `${hours}h${minutes > 0 ? `${minutes}m` : ''}`;
     }
 
+    // ---------------------Paypal---------------------
+    const [paypalDialogOpen, setPaypalDialogOpen] = useState(false); 
+    
+    const handleConfirm = () => {
+        setPaypalDialogOpen(true); 
+    };
+
+    const handlePaypalClose = () => {
+        setPaypalDialogOpen(false);
+    }
+
+    const onPayPalApprove = (data, actions) => {
+        return actions.order.capture().then((details) => {
+            alert(`${details.payer.name.given_name}による支払い成功 `);
+            handleSubmit();
+            setPaypalDialogOpen(false);
+            handleClose(); 
+        });
+    };
+
     return { 
+        handleConfirm,
+        paypalDialogOpen,
+        handlePaypalClose,
+        onPayPalApprove,
         handleClickOpen, 
         handleClose, 
         handleChange,
         handleSearch, 
         handleSubmit, 
         calculateTravelTime, 
-        searchTriggered, 
+        searchTriggered,
+        selectedBus, 
         open, 
         filteredBuses, 
         formData 
