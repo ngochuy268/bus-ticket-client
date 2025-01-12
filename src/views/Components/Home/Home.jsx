@@ -92,7 +92,7 @@ const Home = ({busRoutes}) => {
                                 ))}                     
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div className="col-lg-12">
                             <ul className="page-numbers">
                                 <li>
                                     <button 

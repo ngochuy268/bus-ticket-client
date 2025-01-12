@@ -9,12 +9,14 @@ const Manage = ({busRoutes, setBusRoutes}) => {
         open, 
         searchTriggered, 
         phone, 
+        email,
         bookings,
         handleEdit, 
         handleClose, 
         handleDelete,
         fetchBookingsByPhone,
         setPhone,
+        setEmail,
         setSelectedBookId,
         setOpen
     } = useManageController(busRoutes, setBusRoutes);
@@ -33,7 +35,7 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                     <div className="col-lg-12">
                                         <h4>この<em>フォーム</em>を通じて<em>予約</em>を検索</h4>
                                     </div>                                    
-                                    <div className="col-lg-12">
+                                    <div className="col-lg-6">
                                         <fieldset>
                                             <label htmlFor="Number" className="form-label">電話番号</label>
                                             <input type="text" name="phone" 
@@ -41,6 +43,17 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                                     autoComplete="on" required 
                                                     value={phone}
                                                     onChange={(e) => setPhone(e.target.value)}
+                                            />
+                                        </fieldset>
+                                    </div>
+                                    <div className="col-lg-6">
+                                        <fieldset>
+                                            <label htmlFor="Number" className="form-label">予約ID</label>
+                                            <input type="text" name="bookID" 
+                                                    className="Number" placeholder="予約ID" 
+                                                    autoComplete="on" required 
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
                                             />
                                         </fieldset>
                                     </div>

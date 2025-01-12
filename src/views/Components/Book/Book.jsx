@@ -87,22 +87,28 @@ const Book = ({busRoutes, setBusRoutes }) => {
                                     <div className="col-lg-12">
                                         <h4>この<em>フォーム</em>を通じて<em>予約</em>をしてください</h4>
                                     </div>
-                                    <div className="col-lg-6">
+                                    <div className="col-lg-4">
                                         <fieldset>
                                             <label htmlFor="Name" className="form-label">名前</label>
                                             <input type="text" name="name" className="Name" placeholder="Ex. John Smithee" autoComplete="on" required value={formData.name} onChange={handleChange}/>
                                         </fieldset>
                                     </div>
-                                    <div className="col-lg-6">
+                                    <div className="col-lg-4">
                                         <fieldset>
                                             <label htmlFor="Number" className="form-label">電話番号</label>
-                                            <input type="text" name="phone" className="Number"  placeholder="Ex. +xxx xxx xxx" autoComplete="on" required value={formData.phone} onChange={handleChange}/>
+                                            <input type="number" name="phone" className="Number"  placeholder="Ex. +xxx xxx xxx" autoComplete="on" required value={formData.phone} onChange={handleChange}/>
+                                        </fieldset>
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <fieldset>
+                                            <label htmlFor="Number" className="form-label">メール</label>
+                                            <input type="text" name="email" className="Number"  placeholder="Ex. abc@gmail.com" autoComplete="on" required value={formData.email} onChange={handleChange}/>
                                         </fieldset>
                                     </div>
                                     <div className="col-lg-6">
                                         <fieldset>
                                             <label htmlFor="chooseGuests" className="form-label">ゲストの人数</label>
-                                            <input type="text" name="guests" className="Number" autoComplete="on" required value={formData.guests} onChange={handleChange}/>
+                                            <input type="number" name="guests" className="Number" autoComplete="on" required value={formData.guests} onChange={handleChange}/>
                                         </fieldset>
                                     </div>
                                     <div className="col-lg-3">
@@ -249,44 +255,7 @@ const Book = ({busRoutes, setBusRoutes }) => {
                         いいえ
                     </Button>
                 </DialogActions>
-            </Dialog>
-             {/* Dialog PayPal */}
-            <Dialog open={paypalDialogOpen} onClose={handlePaypalClose}>
-                <DialogTitle>PayPalによる支払い</DialogTitle>
-                <DialogContent>
-                <PayPalScriptProvider
-                    options={{
-                    "client-id": "AQyLUzcpJ2lPG0Qta_wocmPXMn-gubCn0olLfigIgkQfX_wXEyFPUgSAn7fP_HJfcezte4hVo8KW4cjY", 
-                    currency: "JPY",
-                    locale: "ja_JP" 
-                    }}
-                >
-                    <PayPalButtons
-                        createOrder={(data, actions) => {
-                            return actions.order.create({
-                            purchase_units: [
-                                {
-                                    amount: {
-                                        value: selectedBus ? selectedBus.cost : "0", 
-                                    },
-                                },
-                            ],
-                            });
-                        }}
-                        onApprove={onPayPalApprove}
-                        onError={(err) => {
-                            console.error("PayPalエラー:", err);
-                            alert("支払い中にエラーが発生しました。もう一度試してください。");
-                        }}
-                    />
-                </PayPalScriptProvider>
-                </DialogContent>
-                <DialogActions>
-                <Button onClick={handlePaypalClose} color="secondary">
-                    キャンセル
-                </Button>
-                </DialogActions>
-            </Dialog>
+            </Dialog>            
         </>
     )
 

@@ -1,6 +1,5 @@
 import { useMailController } from "../../../controllers/ContactController";
 import ReCAPTCHA from 'react-google-recaptcha';
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 
 const Contact = () => {

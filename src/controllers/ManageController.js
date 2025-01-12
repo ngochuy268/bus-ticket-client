@@ -11,6 +11,7 @@ export const useManageController = (busRoutes, setBusRoutes) => {
     const [open, setOpen] = useState(false);
     const [searchTriggered, setSearchTriggered] = useState(false);
     const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
     const [bookings, setBookings] = useState([]);
     const [error, setError] = useState(null);
     const [selectedBookId, setSelectedBookId] = useState(null);
@@ -55,12 +56,12 @@ export const useManageController = (busRoutes, setBusRoutes) => {
     
     // ------get bus information by phone--------  
     const fetchBookingsByPhone = async () => {
-        if (!phone) {
-            toast.error('電話番号を入力してください。!');
+        if (!phone || !email) {
+            toast.error('時報を入力してください。!');
             return;
         }
         try {
-            const response = await fetchBookings(phone);
+            const response = await fetchBookings(phone, email);
             setBookings(response.data);    
             setError(null); 
         } catch (err) {
@@ -77,12 +78,14 @@ export const useManageController = (busRoutes, setBusRoutes) => {
         open, 
         searchTriggered, 
         phone, 
+        email,
         bookings,
         handleEdit, 
         handleClose, 
         handleDelete,
         fetchBookingsByPhone,
         setPhone,
+        setEmail,
         setSelectedBookId,
         setOpen
     };

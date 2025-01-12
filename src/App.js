@@ -1,10 +1,4 @@
 import { useBusRoutes } from './controllers/busRouteController';
-import { Routes, Route } from 'react-router-dom';
-import Layout from './views/Layout/Layout';
-import Home from './views/Components/Home/Home';
-import Book from './views/Components/Book/Book';
-import Contact from './views/Components/Contact/Contact';
-import Manage from './views/Components/Manage/Manage';
 import Loading from './views/Components/Loading/Loading';
 import { ToastContainer } from 'react-toastify';
 import AppRoutes from './routes/AppRoutes';

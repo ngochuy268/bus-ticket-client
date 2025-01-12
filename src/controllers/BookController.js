@@ -1,15 +1,17 @@
 import { createBooking } from '../models/BookModel';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
-export const BookController = (busRoutes, setBusRoutes) => { 
+export const BookController = (busRoutes) => { 
 
     // ---------タイトル----------
     useEffect(() => {
         document.title = '予約';
     })
 
+    const navigate = useNavigate();
     const [searchTriggered, setSearchTriggered] = useState(false);
     const [selectedBus, setSelectedBus] = useState(null);
     const [open, setOpen] = useState(false);
@@ -17,6 +19,7 @@ export const BookController = (busRoutes, setBusRoutes) => {
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
+        email:'',
         guests: '',
         departure: '',
         destination: '',
@@ -66,10 +69,29 @@ export const BookController = (busRoutes, setBusRoutes) => {
 
     // ------------バスを検索-------------------
     const handleSearch = () => {          
-        const {name, phone, departure, destination, guests, departureDate, returnDate } = formData;
-        if (!name || !phone || !departure || !destination || !guests || !departureDate) {
+        const { name, phone, departure, destination, guests, departureDate, returnDate, email } = formData;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^\d{10,11}$/;
+
+        if (
+            !name || 
+            !phone || 
+            !departure || 
+            !destination || 
+            !guests || 
+            !departureDate || 
+            !email || 
+            !emailRegex.test(email) || 
+            !phoneRegex.test(phone)
+        ) {
             toast.dismiss();
-            toast.error("必須項目をすべて入力してください。");
+            if (!name || !phone || !departure || !destination || !guests || !departureDate || !email) {
+                toast.error("必須項目をすべて入力してください。");
+            } else if (!emailRegex.test(email)) {
+                toast.error("正しいメールアドレスを入力してください。");
+            } else if (!phoneRegex.test(phone)) {
+                toast.error("正しい電話番号を入力してください。");
+            }
             return;
         }
 
@@ -81,12 +103,32 @@ export const BookController = (busRoutes, setBusRoutes) => {
         setFilteredBuses(results);
     };
 
-    // ------------予約を送信-------------------
-    const handleSubmit = async () => {
-        const { name, phone, guests, departureDate, returnDate, departure, destination } = formData;
+    // ------------移動時間を計算する-------------------
+    const calculateTravelTime = (departtime, arrivaltime) => {
+        const [departHour, departMinute] = departtime.split(':').map(Number);
+        const [arriveHour, arriveMinute] = arrivaltime.split(':').map(Number);
+
+        const departDate = new Date(0, 0, 0, departHour, departMinute);
+        const arriveDate = new Date(0, 0, 0, arriveHour, arriveMinute);
+
+        let diffInMinutes = (arriveDate - departDate) / (1000 * 60);
+
+        if (diffInMinutes < 0) {
+            diffInMinutes += 24 * 60;
+        }
+
+        const hours = Math.floor(diffInMinutes / 60);
+        const minutes = diffInMinutes % 60;
+
+        return `${hours}h${minutes > 0 ? `${minutes}m` : ''}`;
+    }
+
+    const handleConfirm = () => {
+        const { name, phone, guests, email, departureDate, returnDate, departure, destination } = formData;
         const reservationData = {
             name,
             phone,
+            email, 
             guests,
             departureDate,
             returnDate,
@@ -111,93 +153,20 @@ export const BookController = (busRoutes, setBusRoutes) => {
             toast.error('座席数が足りません!');
             return;
         }
-
-        try {
-            const response = await createBooking(reservationData);
-
-            if (response.status === 200) {
-                toast.dismiss();
-                toast.success('予約が成功しました！');
-                const updatedBusRoutes = busRoutes.map(bus => {
-                    if (bus.busid === selectedBus.busid) {
-                        return { ...bus, seat: bus.seat - guests }; 
-                    }
-                    return bus;
-                });
-
-                setBusRoutes(updatedBusRoutes); 
-            } else {
-                alert(`エラー: ${response.data.message}`);
-            }
-        } catch (error) {
-            console.error('予約の送信中にエラーが発生しました:', error);
-
-            if (error.response) {
-                alert(`エラー: ${error.response.data.message || '予約の送信に失敗しました。'}`);
-            } else {
-                alert('予約の送信に失敗しました。');
-            }
-        }
-            setOpen(false);
-            setSearchTriggered(false);
-            setFormData({ name: '', phone: '', guests: '', departure: '', destination: '', departureDate: '', returnDate: '' });
-        };
-
-    // ------------移動時間を計算する-------------------
-    const calculateTravelTime = (departtime, arrivaltime) => {
-        const [departHour, departMinute] = departtime.split(':').map(Number);
-        const [arriveHour, arriveMinute] = arrivaltime.split(':').map(Number);
-
-        const departDate = new Date(0, 0, 0, departHour, departMinute);
-        const arriveDate = new Date(0, 0, 0, arriveHour, arriveMinute);
-
-        let diffInMinutes = (arriveDate - departDate) / (1000 * 60);
-
-        if (diffInMinutes < 0) {
-            diffInMinutes += 24 * 60;
-        }
-
-        const hours = Math.floor(diffInMinutes / 60);
-        const minutes = diffInMinutes % 60;
-
-        return `${hours}h${minutes > 0 ? `${minutes}m` : ''}`;
-    }
-
-    // ---------------------Paypal---------------------
-    const [paypalDialogOpen, setPaypalDialogOpen] = useState(false); 
-    
-    const handleConfirm = () => {
-        setPaypalDialogOpen(true); 
-    };
-
-    const handlePaypalClose = () => {
-        setPaypalDialogOpen(false);
-    }
-
-    const onPayPalApprove = (data, actions) => {
-        return actions.order.capture().then((details) => {
-            alert(`${details.payer.name.given_name}による支払い成功 `);
-            handleSubmit();
-            setPaypalDialogOpen(false);
-            handleClose(); 
-        });
+        navigate('/confirm', { state: { reservationData } });
     };
 
     return { 
         handleConfirm,
-        paypalDialogOpen,
-        handlePaypalClose,
-        onPayPalApprove,
         handleClickOpen, 
         handleClose, 
         handleChange,
         handleSearch, 
-        handleSubmit, 
         calculateTravelTime, 
         searchTriggered,
         selectedBus, 
         open, 
         filteredBuses, 
-        formData 
+        formData,
     };
 }

@@ -5,6 +5,7 @@ import Home from '../views/Components/Home/Home';
 import Book from '../views/Components/Book/Book';
 import Contact from '../views/Components/Contact/Contact';
 import Manage from '../views/Components/Manage/Manage';
+import Confirm from '../views/Components/Confirm/Confirm';
 
 const AppRoutes = ({ busRoutes, setBusRoutes }) => {
   return (
@@ -14,6 +15,7 @@ const AppRoutes = ({ busRoutes, setBusRoutes }) => {
         <Route path="/book" element={<Book busRoutes={busRoutes} setBusRoutes={setBusRoutes}/>} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/manage" element={<Manage busRoutes={busRoutes} setBusRoutes={setBusRoutes}/>} />
+        <Route path='/confirm' element={<Confirm busRoutes={busRoutes} setBusRoutes={setBusRoutes}/>} />
       </Route>
     </Routes>
   );
