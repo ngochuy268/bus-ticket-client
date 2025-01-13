@@ -50,6 +50,8 @@ export const useManageController = (busRoutes, setBusRoutes) => {
             setOpen(false);
             setSelectedBookId(null);
             setSearchTriggered(false);
+            setPhone('');
+            setEmail('');
         }
     };
     

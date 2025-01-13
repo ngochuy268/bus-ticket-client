@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
-import { useState } from "react";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 import ConfirmController from "../../../controllers/ConfirmController";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -30,14 +29,7 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
            </div>
            <div className="reservation-form">
                 <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div id="map">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d18642.409438342682!2d106.67493686143673!3d10.804892360999961!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528c6b111c081%3A0x9545c9715dfe2cd7!2sHCMC%20Oncology%20Hospital!5e0!3m2!1sen!2s!4v1735223717359!5m2!1sen!2s" 
-                                height="300" allowFullScreen="" style ={{'borderRadius': '10px', 'width': '100%', 'marginBottom':'100px'}} loading="lazy" referrerPolicy="no-referrer-when-downgrade">                       
-                                </iframe>
-                            </div>
-                        </div>
+                    <div className="row">                    
                         <div className="col-lg-12">
                             <div id="reservation-form" name="gs" method="submit" role="search">
                                 <div className="row">

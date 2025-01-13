@@ -52,7 +52,8 @@ const Contact = () => {
                                             <label htmlFor="Message" className="form-label">メッセージ</label>
                                             <input type="text" name="message" className="Number"  autoComplete="on" required
                                                 value={formData.message} 
-                                                onChange={handleChange} />
+                                                onChange={handleChange} 
+                                                style={{height: '150px'}}/>
                                         </fieldset>
                                     </div> 
                                     <div className="col-lg-12">

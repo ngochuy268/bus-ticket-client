@@ -2185,6 +2185,15 @@ Reservation Page Style
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
+.bus-info-wrapper .personal-info {
+  padding: 20px 20px 0 20px;
+}
+
+.bus-info-wrapper .personal-info span {
+  font-weight: bold;
+  color: #000;
+}
+
 .bus-image {
   width: 150px; 
   height: auto; 

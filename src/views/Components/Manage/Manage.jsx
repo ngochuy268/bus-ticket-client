@@ -82,6 +82,11 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                                 <div className="bus-info-super-wrapper">
                                                     {bookings.map((booking, index) => (
                                                         <div className="bus-info-wrapper" key={index}> 
+                                                            <div className="personal-info">
+                                                                <p><span>名前：</span>{booking.bookname}</p>
+                                                                <p><span>電話番号：</span>{booking.bookphone}</p>
+                                                                <p><span>メール：</span>{booking.bookemail}</p>
+                                                            </div>
                                                             <div className="bus-info-depart-dest">
                                                                 <div className="bus-info">
                                                                         <img src={require(`../../../images/${booking.bookimg}`)} alt="Bus" className="bus-image" />
@@ -101,7 +106,10 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                                                             <i className="fa-solid fa-plane-arrival"></i> : {booking.returndate}
                                                                             </p>                                    
                                                                         </div>
-                                                                        <h2 style={{textAlign: 'right', fontSize: '25px'}}>💰 {booking.bookcost}￥</h2>       
+                                                                       <div className="cost-guests">
+                                                                            <h2 style={{textAlign: 'right', fontSize: '25px'}}>💰 {booking.bookcost}￥</h2>
+                                                                            <h5 style={{color: '#afafaf', marginTop: '10px'}}>ゲストの数:{booking.bookguest}</h5>
+                                                                        </div>       
                                                                 </div>        
                                                             </div>                                             
                                                             <div className="manage-btn">
