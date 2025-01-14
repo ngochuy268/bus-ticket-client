@@ -75,9 +75,9 @@ export const BookController = (busRoutes) => {
         const { name, phone, departure, destination, guests, departureDate, returnDate, email } = formData;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\d{10,11}$/;
-
+        const isNameValid = name.every((n) => n.trim() !== '');
         if (
-            !name || 
+            !isNameValid || 
             !phone || 
             !departure || 
             !destination || 
@@ -90,6 +90,8 @@ export const BookController = (busRoutes) => {
             toast.dismiss();
             if (!name || !phone || !departure || !destination || !guests || !departureDate || !email) {
                 toast.error("必須項目をすべて入力してください。");
+            } else if (!isNameValid) {
+                toast.error("すべての名前を入力してください。"); 
             } else if(guests <= 0 ) {
                 toast.error('ゲストの人数は正の整数でなければなりません。');
             } else if (!emailRegex.test(email)) {
@@ -112,6 +114,7 @@ export const BookController = (busRoutes) => {
         const { name, phone, guests, email, departureDate, returnDate, departure, destination } = formData;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\d{10,11}$/;
+        const isNameValid = name.every((n) => n.trim() !== '');
         const reservationData = {
             name,
             phone,
@@ -134,9 +137,8 @@ export const BookController = (busRoutes) => {
                 image: selectedBus.image
             }
         };
-
         if (
-            !reservationData.name || 
+            !isNameValid  || 
             !reservationData.phone || 
             !reservationData.departure || 
             !reservationData.destination || 
@@ -149,6 +151,8 @@ export const BookController = (busRoutes) => {
             toast.dismiss();
             if (!name || !phone || !departure || !destination || !guests || !departureDate || !email) {
                 toast.error("必須項目をすべて入力してください。");
+            } else if (!isNameValid) {
+                toast.error("すべての名前を入力してください。"); 
             } else if(guests <= 0 ) {
                 toast.error('ゲストの人数は正の整数でなければなりません。');
             } else if (!emailRegex.test(email)) {

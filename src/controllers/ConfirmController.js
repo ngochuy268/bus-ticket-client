@@ -55,7 +55,6 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         }
     };
 
-console.log(formData)
     // ------------移動時間を計算する-------------------
     const calculateTravelTime = (departtime, arrivaltime) => {
         const [departHour, departMinute] = departtime.split(':').map(Number);
@@ -127,9 +126,10 @@ console.log(formData)
         const { name, phone, guests, email } = formData;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\d{10,11}$/;
+        const isNameValid = name.every((n) => n.trim() !== '');
 
         if (
-            !name || 
+            !isNameValid || 
             !phone ||           
             guests <= 0 || 
             !email || 
@@ -139,6 +139,8 @@ console.log(formData)
             toast.dismiss();
             if (!name || !phone || !guests  || !email) {
                 toast.error("必須項目をすべて入力してください。");
+            } else if (!isNameValid) {
+                toast.error("すべての名前を入力してください。"); 
             } else if(guests <= 0) {
                 toast.error('ゲストの人数は正の整数でなければなりません。');
             } else if (!emailRegex.test(email)) {
