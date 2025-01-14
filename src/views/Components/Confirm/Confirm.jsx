@@ -22,7 +22,6 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
         backgroundColor: '#ebebeb'
     }
 
-
     return (
        <>
            <div className="second-page-heading">
@@ -38,8 +37,22 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                                     </div>
                                     <div className="col-lg-4">
                                         <fieldset>
-                                            <label htmlFor="Name" className="form-label">名前</label>
-                                            <input type="text" name="name" className="Name" autoComplete="on" required value={formData.name} onChange={handleChange}/>
+                                            <label htmlFor="Name" className="form-label">名前</label>                                           
+                                                {formData.name.map((name, index) => {
+                                                    const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                    return (                                                                                                             
+                                                        <input
+                                                            key={index}
+                                                            type="text"
+                                                            name={`name${index}`}
+                                                            className="Name"
+                                                            value={name}
+                                                            onChange={handleChange}
+                                                            disabled={isDisabled}
+                                                            style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                        />
+                                                    )                                               
+                                                })}
                                         </fieldset>
                                     </div>
                                     <div className="col-lg-4">
@@ -50,7 +63,7 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                                     </div>
                                     <div className="col-lg-4">
                                         <fieldset>
-                                            <label htmlFor="Number" className="form-label">電話番号</label>
+                                            <label htmlFor="Number" className="form-label">メール</label>
                                             <input type="text" name="email" className="Number" autoComplete="on" required value={formData.email} onChange={handleChange}/>
                                         </fieldset>
                                     </div>

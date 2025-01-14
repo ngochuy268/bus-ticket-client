@@ -1,11 +1,5 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
-import { toast } from 'react-toastify';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { BookController } from '../../../controllers/BookController';
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-
-
 
 const Book = ({busRoutes, setBusRoutes }) => {
 
@@ -16,18 +10,13 @@ const Book = ({busRoutes, setBusRoutes }) => {
         handleSearch, 
         calculateTravelTime, 
         searchTriggered, 
-        selectedBus,
         open, 
         filteredBuses, 
         formData,
-        handleConfirm,
-        paypalDialogOpen,
-        handlePaypalClose,
-        onPayPalApprove, 
+        handleConfirm
     } = BookController(busRoutes, setBusRoutes);
 
-   
-    
+     
     return (
         <>
            <div className="second-page-heading">
@@ -86,13 +75,27 @@ const Book = ({busRoutes, setBusRoutes }) => {
                                 <div className="row">
                                     <div className="col-lg-12">
                                         <h4>この<em>フォーム</em>を通じて<em>予約</em>をしてください</h4>
-                                    </div>
-                                    <div className="col-lg-4">
+                                    </div>                                  
+                                    <div className="col-lg-4" >
                                         <fieldset>
-                                            <label htmlFor="Name" className="form-label">名前</label>
-                                            <input type="text" name="name" className="Name" placeholder="Ex. John Smithee" autoComplete="on" required value={formData.name} onChange={handleChange}/>
+                                            <label htmlFor='name' className="form-label">名前</label>
+                                                {formData.name.map((name, index) => {
+                                                    const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                    return (
+                                                        <input
+                                                        key={index}
+                                                        type="text"
+                                                        name={`name${index}`}
+                                                        className="Name"
+                                                        value={name}
+                                                        onChange={handleChange}
+                                                        disabled={isDisabled}
+                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                    />
+                                                    )                                               
+                                                })}
                                         </fieldset>
-                                    </div>
+                                    </div>                                   
                                     <div className="col-lg-4">
                                         <fieldset>
                                             <label htmlFor="Number" className="form-label">電話番号</label>
@@ -108,7 +111,7 @@ const Book = ({busRoutes, setBusRoutes }) => {
                                     <div className="col-lg-6">
                                         <fieldset>
                                             <label htmlFor="chooseGuests" className="form-label">ゲストの人数</label>
-                                            <input type="number" name="guests" className="Number" autoComplete="on" required value={formData.guests} onChange={handleChange}/>
+                                            <input type="number" name="guests" className="Number" autoComplete="on" min='0' required value={formData.guests} onChange={handleChange}/>
                                         </fieldset>
                                     </div>
                                     <div className="col-lg-3">

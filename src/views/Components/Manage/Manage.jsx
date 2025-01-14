@@ -21,7 +21,6 @@ const Manage = ({busRoutes, setBusRoutes}) => {
         setOpen
     } = useManageController(busRoutes, setBusRoutes);
 
-
     return (
         <>
             <div className="second-page-heading">
@@ -80,44 +79,52 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                             <fieldset >
                                                 <h4>バス予約情報</h4>
                                                 <div className="bus-info-super-wrapper">
-                                                    {bookings.map((booking, index) => (
-                                                        <div className="bus-info-wrapper" key={index}> 
-                                                            <div className="personal-info">
-                                                                <p><span>名前：</span>{booking.bookname}</p>
-                                                                <p><span>電話番号：</span>{booking.bookphone}</p>
-                                                                <p><span>メール：</span>{booking.bookemail}</p>
-                                                            </div>
-                                                            <div className="bus-info-depart-dest">
-                                                                <div className="bus-info">
-                                                                        <img src={require(`../../../images/${booking.bookimg}`)} alt="Bus" className="bus-image" />
-                                                                    <div className="bus-details">
-                                                                        <h4 style={{marginBottom: '15px'}}>{booking.bookbusname}</h4>
-                                                                        <h6>{booking.bookbustype}</h6>
-                                                                        <div className="rating">⭐ {booking.bookrate}/10</div>
-                                                                        <p style={{textAlign: 'left', marginTop: '10px'}}>🕒 {booking.bookdeparttime} • {booking.bookdepart}</p>
-                                                                        <p style={{textAlign: 'left'}}>🕒 {booking.bookarrivaltime} • {booking.bookdest}</p>                                                                                           
-                                                                    </div> 
-                                                                </div>  
-                                                                <div className="depart-dest-cost-wrapper">
-                                                                        <div className="depart-dest">
-                                                                            <p>
-                                                                            <i className="fa-solid fa-plane-departure"></i> : {booking.departdate}  <br/>
-                                                                            ---- <br/>
-                                                                            <i className="fa-solid fa-plane-arrival"></i> : {booking.returndate}
-                                                                            </p>                                    
+                                                    {bookings.map((booking, index) => {
+                                                        const namesArray = booking.names.split(', ');
+                                                        return (
+                                                            <div className="bus-info-wrapper" key={index}> 
+                                                                <div className="personal-info">
+                                                                    <p><span>名前：</span></p>
+                                                                    {namesArray.map((name, i) => (
+                                                                        <div key={i} style={{ marginLeft: '40px' }}>
+                                                                            {name}
                                                                         </div>
-                                                                       <div className="cost-guests">
-                                                                            <h2 style={{textAlign: 'right', fontSize: '25px'}}>💰 {booking.bookcost}￥</h2>
-                                                                            <h5 style={{color: '#afafaf', marginTop: '10px'}}>ゲストの数:{booking.bookguest}</h5>
-                                                                        </div>       
-                                                                </div>        
-                                                            </div>                                             
-                                                            <div className="manage-btn">
-                                                                <button className="btn btn-warning" onClick={handleEdit}>修理</button>
-                                                                <button className="btn btn-danger" onClick={() => {setSelectedBookId({ bookid: booking.bookid, busid: booking.busid, bookguest: booking.bookguest }); setOpen(true); }}>削除</button>
-                                                            </div>                                                 
-                                                        </div>    
-                                                    ))}                                                                                                   
+                                                                    ))}
+                                                                    <p><span>電話番号：</span>{booking.bookphone}</p>
+                                                                    <p><span>メール：</span>{booking.bookemail}</p>
+                                                                </div>
+                                                                <div className="bus-info-depart-dest">
+                                                                    <div className="bus-info">
+                                                                            <img src={require(`../../../images/${booking.bookimg}`)} alt="Bus" className="bus-image" />
+                                                                        <div className="bus-details">
+                                                                            <h4 style={{marginBottom: '15px'}}>{booking.bookbusname}</h4>
+                                                                            <h6>{booking.bookbustype}</h6>
+                                                                            <div className="rating">⭐ {booking.bookrate}/10</div>
+                                                                            <p style={{textAlign: 'left', marginTop: '10px'}}>🕒 {booking.bookdeparttime} • {booking.bookdepart}</p>
+                                                                            <p style={{textAlign: 'left'}}>🕒 {booking.bookarrivaltime} • {booking.bookdest}</p>                                                                                           
+                                                                        </div> 
+                                                                    </div>  
+                                                                    <div className="depart-dest-cost-wrapper">
+                                                                            <div className="depart-dest">
+                                                                                <p>
+                                                                                <i className="fa-solid fa-plane-departure"></i> : {booking.departdate}  <br/>
+                                                                                ---- <br/>
+                                                                                <i className="fa-solid fa-plane-arrival"></i> : {booking.returndate}
+                                                                                </p>                                    
+                                                                            </div>
+                                                                        <div className="cost-guests">
+                                                                                <h2 style={{textAlign: 'right', fontSize: '25px'}}>💰 {booking.bookcost}￥</h2>
+                                                                                <h5 style={{color: '#afafaf', marginTop: '10px'}}>ゲストの数: {booking.bookguest}</h5>
+                                                                            </div>       
+                                                                    </div>        
+                                                                </div>                                             
+                                                                <div className="manage-btn">
+                                                                    <button className="btn btn-warning" onClick={handleEdit}>修理</button>
+                                                                    <button className="btn btn-danger" onClick={() => {setSelectedBookId({ bookid: booking.bookid, busid: booking.busid, bookguest: booking.bookguest }); setOpen(true); }}>削除</button>
+                                                                </div>                                                 
+                                                            </div>    
+                                                        )                                                                                                               
+                                                    })}                                                                                                   
                                                 </div>                                                                              
                                             </fieldset>                                        
                                         </div>                                      

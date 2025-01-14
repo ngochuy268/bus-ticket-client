@@ -21,13 +21,41 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+
+        if (name === 'guests') {
+            const guestsCount = parseInt(value) || 0;
+
+            setFormData((prev) => {
+                const updatedNames = [...prev.name];
+                if (guestsCount > updatedNames.length) {
+                    while (updatedNames.length < guestsCount) {
+                        updatedNames.push('');
+                    }
+                } else if (guestsCount < updatedNames.length) {
+                    updatedNames.splice(guestsCount <= 0 ? 1 : guestsCount);
+                }
+                return {
+                    ...prev,
+                    guests: guestsCount,
+                    name: updatedNames,
+                };
+            });
+        } else if (name.startsWith('name')) {
+            const index = parseInt(name.replace('name', ''), 10); 
+            setFormData((prev) => {
+                const updatedNames = [...prev.name];
+                updatedNames[index] = value;
+                return { ...prev, name: updatedNames };
+            });
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value,
+            }));
+        }
     };
 
-
+console.log(formData)
     // ------------移動時間を計算する-------------------
     const calculateTravelTime = (departtime, arrivaltime) => {
         const [departHour, departMinute] = departtime.split(':').map(Number);
@@ -61,13 +89,11 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
     // ------------予約を送信-------------------
     const handleSubmit = async () => {
         try {
-
             const confirmCode = generateRandomString();
             const updatedFormData = {
                 ...formData,
                 confirmCode,
             };
-            console.log(updatedFormData)
             const response = await createBooking(updatedFormData);
             if (response.status === 200) {
                 toast.dismiss();
@@ -105,7 +131,7 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         if (
             !name || 
             !phone ||           
-            !guests || 
+            guests <= 0 || 
             !email || 
             !emailRegex.test(email) || 
             !phoneRegex.test(phone)
@@ -113,6 +139,8 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
             toast.dismiss();
             if (!name || !phone || !guests  || !email) {
                 toast.error("必須項目をすべて入力してください。");
+            } else if(guests <= 0) {
+                toast.error('ゲストの人数は正の整数でなければなりません。');
             } else if (!emailRegex.test(email)) {
                 toast.error("正しいメールアドレスを入力してください。");
             } else if (!phoneRegex.test(phone)) {
