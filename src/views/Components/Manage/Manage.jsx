@@ -109,7 +109,7 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                                                                 <p>
                                                                                 <i className="fa-solid fa-plane-departure"></i> : {booking.departdate}  <br/>
                                                                                 ---- <br/>
-                                                                                <i className="fa-solid fa-plane-arrival"></i> : {booking.returndate}
+                                                                                <i className="fa-solid fa-plane-arrival"></i> : {booking.returndate == '0000-00-00' ? '' : booking.returndate}
                                                                                 </p>                                    
                                                                             </div>
                                                                         <div className="cost-guests">
