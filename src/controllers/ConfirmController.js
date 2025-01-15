@@ -92,6 +92,7 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
             const updatedFormData = {
                 ...formData,
                 confirmCode,
+                returnDate: formData.returnDate || null
             };
             const response = await createBooking(updatedFormData);
             if (response.status === 200) {

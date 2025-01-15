@@ -121,7 +121,7 @@ export const BookController = (busRoutes) => {
             email, 
             guests,
             departureDate,
-            returnDate,
+            returnDate: returnDate || null,
             departure,
             destination,
 
