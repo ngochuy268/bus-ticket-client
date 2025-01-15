@@ -13,7 +13,7 @@ import { useHomeController } from '../../../controllers/HomeController';
 
 const Home = ({busRoutes}) => {
 
-    const { currentItems, totalPages, handlePageChange, currentPage, settings } = useHomeController(busRoutes);
+    const { currentItems, totalPages, handlePageChange, currentPage, settings, getPaginationNumbers } = useHomeController(busRoutes);
 
     return (
         <>      
@@ -102,11 +102,17 @@ const Home = ({busRoutes}) => {
                                         <i className="fa fa-arrow-left"></i>
                                     </button>
                                 </li>
-                                {Array.from({ length: totalPages }, (_, i) => (
-                                <li key={i} className={currentPage === i + 1 ? 'active' : ''}>
-                                    <button onClick={() => handlePageChange(i + 1)}>{i + 1}</button>
-                                </li>
+
+                                {getPaginationNumbers().map((page, index) => (
+                                    <li key={page === '...' ? `ellipsis-${index}` : page} className={currentPage === page ? 'active' : ''}>
+                                        {page === '...' ? (
+                                            <span>...</span>
+                                        ) : (
+                                            <button onClick={() => handlePageChange(page)}>{page}</button>
+                                        )}
+                                    </li>
                                 ))}
+
                                 <li>
                                     <button 
                                         disabled={currentPage === totalPages} 
@@ -119,16 +125,16 @@ const Home = ({busRoutes}) => {
                         </div>
                     </div>
                     <div className="col-lg-4">
-                    <div className="side-bar-map">
-                        <div className="row">
-                        <div className="col-lg-12">
-                            <div id="map">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d18642.409438342682!2d106.67493686143673!3d10.804892360999961!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528c6b111c081%3A0x9545c9715dfe2cd7!2sHCMC%20Oncology%20Hospital!5e0!3m2!1sen!2s!4v1735223717359!5m2!1sen!2s" 
-                                width="400" height="550" allowFullScreen="" style ={{'borderRadius': '10px'}} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                        <div className="side-bar-map">
+                            <div className="row">
+                            <div className="col-lg-12">
+                                <div id="map">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d18642.409438342682!2d106.67493686143673!3d10.804892360999961!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528c6b111c081%3A0x9545c9715dfe2cd7!2sHCMC%20Oncology%20Hospital!5e0!3m2!1sen!2s!4v1735223717359!5m2!1sen!2s" 
+                                    width="400" height="550" allowFullScreen="" style ={{'borderRadius': '10px'}} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                                </div>
+                            </div>
                             </div>
                         </div>
-                        </div>
-                    </div>
                     </div>
                 </div>
                 </div>
