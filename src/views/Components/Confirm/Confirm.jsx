@@ -155,7 +155,7 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                                             <button className="search-button" style={{marginBottom : '30px', width: 'fit-content'}}
                                                 onClick={handleOpenPaypal}
                                             >
-                                                検索
+                                                予約
                                             </button>
                                         </div>     
                                     </div>                                                               
