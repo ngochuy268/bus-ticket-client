@@ -69,6 +69,7 @@ export const useManageController = (busRoutes, setBusRoutes) => {
         } catch (err) {
             if (err.response && err.response.status === 404) {
                 setError('この電話番号に対する予約は見つかりませんでした！');
+                setBookings([]);
             } else {
                 setError('予約の取得中にエラーが発生しました！');
             }
