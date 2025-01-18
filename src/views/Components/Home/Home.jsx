@@ -7,8 +7,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
 import { useHomeController } from '../../../controllers/HomeController';
-
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 
 const Home = ({busRoutes}) => {
@@ -62,7 +62,7 @@ const Home = ({busRoutes}) => {
                                             <div className="row">
                                                 <div className="col-lg-4 col-sm-5">
                                                     <div className="image">
-                                                        <img src={require(`../../../images/${item.image}`)} alt=""/>
+                                                        <LazyLoadImage src={require(`../../../images/${item.image}`)} alt="" effect="blur"/>
                                                         <div className="confirm-ticket">
                                                             即時確認    
                                                             <div className="point"></div> 
