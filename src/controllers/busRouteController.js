@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { fetchBusRoutes } from '../models/busRouteModel';
+import { fetchBusRoutes, fetchRoutes, fetchRoutesByDepartAndDest } from '../models/busRouteModel';
 
-export const useBusRoutes = () => {
+export const useBusRoutes = (depart, dest) => {
   const [busRoutes, setBusRoutes] = useState([]);
+  const [routes, setRoutes] =useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,9 +16,22 @@ export const useBusRoutes = () => {
         setLoading(false);
       }
     };
-
     getBusRoutes();
   }, []);
 
-  return { busRoutes, loading, setBusRoutes };
+  useEffect(() => {
+    const getRoutes = async () => {
+      try {
+        const routes = await fetchRoutes();
+        setRoutes(routes);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+    getRoutes();
+  }, []);
+
+
+  return { routes, busRoutes, loading, setBusRoutes};
 };

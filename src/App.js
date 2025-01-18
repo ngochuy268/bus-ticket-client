@@ -2,16 +2,20 @@ import { useBusRoutes } from './controllers/busRouteController';
 import Loading from './views/Components/Loading/Loading';
 import { ToastContainer } from 'react-toastify';
 import AppRoutes from './routes/AppRoutes';
+import { useState } from 'react';
 
 function App() {
-
-  const { busRoutes, loading, setBusRoutes } = useBusRoutes();
+  const { routes, busRoutes, loading, setBusRoutes } = useBusRoutes();
 
   return (
     <>
       {loading ? <Loading loading={loading} /> : 
           <div className="App">     
-            <AppRoutes busRoutes={busRoutes} setBusRoutes={setBusRoutes} />
+            <AppRoutes 
+              busRoutes={busRoutes} 
+              routes={routes} 
+              setBusRoutes={setBusRoutes} 
+            />
             <ToastContainer
               position="top-center"
               autoClose={5000}

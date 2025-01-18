@@ -1,9 +1,9 @@
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { fetchRoutesByDepartAndDest } from '../models/BookModel';
 
-
-export const BookController = (busRoutes) => { 
+export const BookController = (routes) => { 
 
     // ---------タイトル----------
     useEffect(() => {
@@ -14,7 +14,11 @@ export const BookController = (busRoutes) => {
     const [searchTriggered, setSearchTriggered] = useState(false);
     const [selectedBus, setSelectedBus] = useState(null);
     const [open, setOpen] = useState(false);
-    const [filteredBuses, setFilteredBuses] = useState([]);
+    const [uniqueDeparts, setUniqueDeparts] = useState([]);
+    const [uniqueDests, setUniqueDests] = useState([]);
+    const [routesByDepartAndDest, setRoutesByDepartAndDest] = useState([]);
+    const [error, setError] = useState(null);
+
     const [formData, setFormData] = useState({
         name: [''],
         phone: '',
@@ -24,9 +28,20 @@ export const BookController = (busRoutes) => {
         destination: '',
         departureDate: '',
         returnDate: ''
-    });
+    }); 
+    // ---------------Route List--------------------
+        useEffect(() => {
+            const allDeparts = routes.map(route => route.depart);
+            const allDests = routes.map(route => route.dest);
+        
+            const uniqueDeparts = [...new Set(allDeparts)];
+            const uniqueDests = [...new Set(allDests)];
+             
+            setUniqueDeparts(uniqueDeparts);
+            setUniqueDests(uniqueDests);
+        }, [routes]);
 
-    // -------------予約フォーム----------------------
+        // -------------予約フォーム----------------------
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -71,11 +86,12 @@ export const BookController = (busRoutes) => {
     };
     
     // ------------バスを検索-------------------
-    const handleSearch = () => {          
+    const handleSearch = async () => {          
         const { name, phone, departure, destination, guests, departureDate, returnDate, email } = formData;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\d{10,11}$/;
         const isNameValid = name.every((n) => n.trim() !== '');
+      
         if (
             !isNameValid || 
             !phone || 
@@ -101,13 +117,23 @@ export const BookController = (busRoutes) => {
             }
             return;
         }
-
-        const results = busRoutes.filter(bus => 
-            bus.depart.toLowerCase() === departure.toLowerCase() &&
-            bus.dest.toLowerCase() === destination.toLowerCase()
-        );
-        setSearchTriggered(true);
-        setFilteredBuses(results);
+        try {
+            const response = await fetchRoutesByDepartAndDest(departure, destination);
+            if (departure == destination) {
+                toast.error('出発地と目的地を同じにすることはできません!');
+                return;
+            } 
+            setSearchTriggered(true);
+            setRoutesByDepartAndDest(response.data);    
+            setError(null); 
+        } catch (err) {
+            if (err.response && err.response.status === 404) {
+                setError('Error！');
+                setRoutesByDepartAndDest([]);
+            } else {
+                setError('Error！');
+            }
+        }
     };
 
     const handleConfirm = () => {
@@ -222,6 +248,7 @@ export const BookController = (busRoutes) => {
 
 
     return { 
+        routesByDepartAndDest,
         handleConfirm,
         handleClickOpen, 
         handleClose, 
@@ -231,7 +258,8 @@ export const BookController = (busRoutes) => {
         searchTriggered,
         selectedBus, 
         open, 
-        filteredBuses, 
         formData,
+        uniqueDeparts,
+        uniqueDests
     };
 }

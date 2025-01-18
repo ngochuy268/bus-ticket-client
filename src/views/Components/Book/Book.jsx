@@ -1,7 +1,7 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import { BookController } from '../../../controllers/BookController';
 
-const Book = ({busRoutes, setBusRoutes }) => {
+const Book = ({routes}) => {
 
     const {
         handleClickOpen, 
@@ -11,12 +11,13 @@ const Book = ({busRoutes, setBusRoutes }) => {
         calculateTravelTime, 
         searchTriggered, 
         open, 
-        filteredBuses, 
         formData,
-        handleConfirm
-    } = BookController(busRoutes, setBusRoutes);
-
-     
+        handleConfirm, 
+        routesByDepartAndDest,
+        uniqueDeparts,
+        uniqueDests
+    } = BookController(routes);
+    
     return (
         <>
            <div className="second-page-heading">
@@ -137,8 +138,8 @@ const Book = ({busRoutes, setBusRoutes }) => {
                                                     id="chooseCategory"
                                             >
                                                 <option value="">ex. 東京</option>
-                                                {busRoutes.map((item,index) => (
-                                                    <option key={index} value={item.depart}>{item.depart}</option>
+                                                {uniqueDeparts.map((item,index) => (
+                                                    <option key={index} value={item}>{item}</option>
                                                 ))}                                               
                                             </select>
                                         </fieldset>
@@ -154,8 +155,8 @@ const Book = ({busRoutes, setBusRoutes }) => {
                                                     onChange={handleChange}
                                             >
                                                 <option value="">ex. 大阪</option>
-                                                {busRoutes.map((item,index) => (
-                                                    <option key={index} value={item.dest}>{item.dest}</option>
+                                                {uniqueDests.map((item,index) => (
+                                                    <option key={index} value={item}>{item}</option>
                                                 ))}
                                             </select>
                                         </fieldset>
@@ -167,13 +168,13 @@ const Book = ({busRoutes, setBusRoutes }) => {
                                    </div>
                                     {searchTriggered && (
                                         <>
-                                            {filteredBuses.length > 0 ? (
+                                            {routesByDepartAndDest.length > 0 ? (
                                                 <div className="col-lg-12">
                                                     <div className="bus-book-info-wrapper">
                                                         <div className="container">
                                                             <div className="row">
                                                                 <div className="col-lg-12">
-                                                                    {filteredBuses.map((bus, index) => (
+                                                                    {routesByDepartAndDest.map((bus, index) => (
                                                                         <div className="bus-book-info" key={index}>
                                                                             <div className="container">
                                                                                 <div className="row">
