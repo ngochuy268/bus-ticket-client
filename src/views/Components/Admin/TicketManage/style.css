@@ -1,0 +1,62 @@
+/* General styles */
+.ticket-manage {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.ticket-manage .user-info {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+.ticket-manage .user-info p {
+    margin: 5px 0;
+}
+
+.ticket-manage .logout-btn {
+    margin-bottom: 20px;
+}
+
+/* Ticket list styles */
+.ticket-manage .ticket-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ticket-manage .ticket-item {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-manage .ticket-details {
+    margin-bottom: 20px;
+}
+
+.ticket-manage .ticket-details p {
+    margin: 5px 0;
+}
+
+.ticket-manage .bus-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* Guest table styles */
+.ticket-manage .guest-table {
+    margin-top: 20px;
+}
+
+.ticket-manage .guest-table .MuiTableCell-root {
+    font-weight: bold;
+}
+
+.ticket-manage .guest-table .MuiTableRow-root:hover {
+    background-color: #f5f5f5;
+}

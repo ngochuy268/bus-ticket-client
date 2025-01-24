@@ -27,17 +27,32 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
 
             setFormData((prev) => {
                 const updatedNames = [...prev.name];
+                const updatedPhones = [...prev.phone];
+                const updatedEmails = [...prev.email];
+                const updatedGenders = [...prev.gender];
+
                 if (guestsCount > updatedNames.length) {
                     while (updatedNames.length < guestsCount) {
                         updatedNames.push('');
+                        updatedPhones.push('');
+                        updatedEmails.push('');
+                        updatedGenders.push('');
                     }
-                } else if (guestsCount < updatedNames.length) {
+                 }else if (guestsCount < updatedNames.length) {
                     updatedNames.splice(guestsCount <= 0 ? 1 : guestsCount);
+                    updatedPhones.splice(guestsCount <= 0 ? 1 : guestsCount);
+                    updatedEmails.splice(guestsCount <= 0 ? 1 : guestsCount);
+                    updatedGenders.splice(guestsCount <= 0 ? 1 : guestsCount);
                 }
+    
                 return {
                     ...prev,
                     guests: guestsCount,
                     name: updatedNames,
+                    phone: updatedPhones,
+                    email: updatedEmails,
+                    gender: updatedGenders,
+                    receiveCode: guestsCount > 1 ? 1 : 0
                 };
             });
         } else if (name.startsWith('name')) {
@@ -46,6 +61,27 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
                 const updatedNames = [...prev.name];
                 updatedNames[index] = value;
                 return { ...prev, name: updatedNames };
+            });
+        } else if (name.startsWith('phone')) {
+            const index = parseInt(name.replace('phone', ''), 10);
+            setFormData((prev) => {
+                const updatedPhones = [...prev.phone];
+                updatedPhones[index] = value;
+                return { ...prev, phone: updatedPhones };
+            });
+        } else if (name.startsWith('email')) {
+            const index = parseInt(name.replace('email', ''), 10);
+            setFormData((prev) => {
+                const updatedEmails = [...prev.email];
+                updatedEmails[index] = value;
+                return { ...prev, email: updatedEmails };
+            });
+        } else if (name.startsWith('gender')) {
+            const index = parseInt(name.replace('gender', ''), 10);
+            setFormData((prev) => {
+                const updatedGenders = [...prev.gender];
+                updatedGenders[index] = value;
+                return { ...prev, gender: updatedGenders };
             });
         } else {
             setFormData((prev) => ({
@@ -124,30 +160,47 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
     
     // ---------------------Paypal--------------------
     const handleOpenPaypal = () => {
-        const { name, phone, guests, email } = formData;
+        const { name, phone, guests, email, gender } = formData;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\d{10,11}$/;
         const isNameValid = name.every((n) => n.trim() !== '');
-
+        const isPhone = phone.every((n) => n.trim() !== '');
+        const isEmail = email.every((n) => n.trim() !== '');
+        const isPhoneValid = phone.every((p) => phoneRegex.test(p));
+        const isEmailValid = email.every((e) => emailRegex.test(e));
+        const isGender = gender.every((g) => g.trim() !== '');
+        const hasDuplicatePhones = new Set(phone).size !== phone.length;
+        const hasDuplicateEmails = new Set(email).size !== email.length;
         if (
             !isNameValid || 
-            !phone ||           
+            !isPhone ||           
             guests <= 0 || 
-            !email || 
-            !emailRegex.test(email) || 
-            !phoneRegex.test(phone)
+            !isEmail || 
+            !isPhoneValid || 
+            !isEmailValid ||
+            !isGender
         ) {
             toast.dismiss();
-            if (!name || !phone || !guests  || !email) {
+            if (!name || !phone || !guests  || !email || !isGender) {
                 toast.error("必須項目をすべて入力してください。");
             } else if (!isNameValid) {
                 toast.error("すべての名前を入力してください。"); 
+            } else if (!isGender) {
+                toast.error("すべての性別を入力してください。"); 
+            } else if (!isEmail) {
+                toast.error("すべてのメールを入力してください。"); 
+            } else if (!isPhone) {
+                toast.error("すべての電話番号を入力してください。"); 
             } else if(guests <= 0) {
                 toast.error('ゲストの人数は正の整数でなければなりません。');
-            } else if (!emailRegex.test(email)) {
+            } else if (!isEmailValid) {
                 toast.error("正しいメールアドレスを入力してください。");
-            } else if (!phoneRegex.test(phone)) {
+            } else if (!isPhoneValid) {
                 toast.error("正しい電話番号を入力してください。");
+            } else if (hasDuplicatePhones) {
+                toast.error("電話番号が重複しています。"); 
+            } else if (hasDuplicateEmails) {
+                toast.error("メールアドレスが重複しています。"); 
             }
             return;
         }

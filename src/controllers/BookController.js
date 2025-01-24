@@ -18,16 +18,20 @@ export const BookController = (routes) => {
     const [uniqueDests, setUniqueDests] = useState([]);
     const [routesByDepartAndDest, setRoutesByDepartAndDest] = useState([]);
     const [error, setError] = useState(null);
-
+    const initialGuests = 1; 
+    const initialReceiveCode = Array(initialGuests).fill(0); 
+    initialReceiveCode[0] = 1; 
     const [formData, setFormData] = useState({
         name: [''],
-        phone: '',
-        email:'',
-        guests: 1,
+        phone: [''],
+        email:[''],
+        gender: [''],
+        guests: initialGuests,
         departure: '',
         destination: '',
         departureDate: '',
-        returnDate: ''
+        returnDate: '',
+        receiveCode: initialReceiveCode
     }); 
     // ---------------Route List--------------------
         useEffect(() => {
@@ -41,6 +45,7 @@ export const BookController = (routes) => {
             setUniqueDests(uniqueDests);
         }, [routes]);
 
+
         // -------------予約フォーム----------------------
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -50,19 +55,39 @@ export const BookController = (routes) => {
 
             setFormData((prev) => {
                 const updatedNames = [...prev.name];
+                const updatedPhones = [...prev.phone];
+                const updatedEmails = [...prev.email];
+                const updatedGenders = [...prev.gender];
+                const updatedReceiveCodes = [...prev.receiveCode];
 
                 if (guestsCount > updatedNames.length) {
                     while (updatedNames.length < guestsCount) {
                         updatedNames.push('');
+                        updatedPhones.push('');
+                        updatedEmails.push('');
+                        updatedGenders.push('');
+                        updatedReceiveCodes.push(0);
                     }
                  }else if (guestsCount < updatedNames.length) {
                     updatedNames.splice(guestsCount <= 0 ? 1 : guestsCount);
+                    updatedPhones.splice(guestsCount <= 0 ? 1 : guestsCount);
+                    updatedEmails.splice(guestsCount <= 0 ? 1 : guestsCount);
+                    updatedGenders.splice(guestsCount <= 0 ? 1 : guestsCount);
+                    updatedReceiveCodes.splice(guestsCount <= 0 ? 1 : guestsCount);
+                }
+
+                if (updatedReceiveCodes.length > 0) {
+                    updatedReceiveCodes[0] = 1;
                 }
     
                 return {
                     ...prev,
                     guests: guestsCount,
                     name: updatedNames,
+                    phone: updatedPhones,
+                    email: updatedEmails,
+                    gender: updatedGenders,
+                    receiveCode: updatedReceiveCodes
                 };
             });
         } else if (name.startsWith('name')) {
@@ -71,6 +96,27 @@ export const BookController = (routes) => {
                 const updatedNames = [...prev.name];
                 updatedNames[index] = value;
                 return { ...prev, name: updatedNames };
+            });
+        } else if (name.startsWith('phone')) {
+            const index = parseInt(name.replace('phone', ''), 10);
+            setFormData((prev) => {
+                const updatedPhones = [...prev.phone];
+                updatedPhones[index] = value;
+                return { ...prev, phone: updatedPhones };
+            });
+        } else if (name.startsWith('email')) {
+            const index = parseInt(name.replace('email', ''), 10);
+            setFormData((prev) => {
+                const updatedEmails = [...prev.email];
+                updatedEmails[index] = value;
+                return { ...prev, email: updatedEmails };
+            });
+        } else if (name.startsWith('gender')) {
+            const index = parseInt(name.replace('gender', ''), 10);
+            setFormData((prev) => {
+                const updatedGenders = [...prev.gender];
+                updatedGenders[index] = value;
+                return { ...prev, gender: updatedGenders };
             });
         } else {
             setFormData((prev) => ({
@@ -87,33 +133,52 @@ export const BookController = (routes) => {
     
     // ------------バスを検索-------------------
     const handleSearch = async () => {          
-        const { name, phone, departure, destination, guests, departureDate, returnDate, email } = formData;
+        const { name, phone, gender, departure, destination, guests, departureDate, email } = formData;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\d{10,11}$/;
         const isNameValid = name.every((n) => n.trim() !== '');
-      
+        const isPhone = phone.every((n) => n.trim() !== '');
+        const isEmail = email.every((n) => n.trim() !== '');
+        const isPhoneValid = phone.every((p) => phoneRegex.test(p));
+        const isEmailValid = email.every((e) => emailRegex.test(e));
+        const isGender = gender.every((g) => g.trim() !== '');
+        const hasDuplicatePhones = new Set(phone).size !== phone.length;
+        const hasDuplicateEmails = new Set(email).size !== email.length;
         if (
             !isNameValid || 
-            !phone || 
+            !isPhone || 
+            !isGender ||
             !departure || 
             !destination || 
             guests <= 0 || 
             !departureDate || 
-            !email || 
-            !emailRegex.test(email) || 
-            !phoneRegex.test(phone)
+            !isEmail || 
+            !isEmailValid || 
+            !isPhoneValid ||
+            hasDuplicatePhones ||
+            hasDuplicateEmails
         ) {
             toast.dismiss();
-            if (!name || !phone || !departure || !destination || !guests || !departureDate || !email) {
+            if (!name || !phone || !gender || !departure || !destination || !guests || !departureDate || !email) {
                 toast.error("必須項目をすべて入力してください。");
             } else if (!isNameValid) {
                 toast.error("すべての名前を入力してください。"); 
+            } else if (!isGender) {
+                toast.error("すべての性別を入力してください。"); 
+            } else if (!isEmail) {
+                toast.error("すべてのメールを入力してください。"); 
+            } else if (!isPhone) {
+                toast.error("すべての電話番号を入力してください。"); 
             } else if(guests <= 0 ) {
                 toast.error('ゲストの人数は正の整数でなければなりません。');
-            } else if (!emailRegex.test(email)) {
+            } else if (!isEmailValid) {
                 toast.error("正しいメールアドレスを入力してください。");
-            } else if (!phoneRegex.test(phone)) {
+            } else if (!isPhoneValid) {
                 toast.error("正しい電話番号を入力してください。");
+            } else if (hasDuplicatePhones) {
+                toast.error("電話番号が重複しています。"); 
+            } else if (hasDuplicateEmails) {
+                toast.error("メールアドレスが重複しています。"); 
             }
             return;
         }
@@ -137,19 +202,20 @@ export const BookController = (routes) => {
     };
 
     const handleConfirm = () => {
-        const { name, phone, guests, email, departureDate, returnDate, departure, destination } = formData;
+        const { name, phone, email, gender, guests, departureDate, returnDate, departure, destination, receiveCode } = formData;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^\d{10,11}$/;
-        const isNameValid = name.every((n) => n.trim() !== '');
+        const phoneRegex = /^\d{10,11}$/;       
         const reservationData = {
             name,
             phone,
             email, 
+            gender,
             guests,
             departureDate,
             returnDate: returnDate || null,
             departure,
             destination,
+            receiveCode,
 
             selectedBus : {
                 busid: selectedBus.busid,
@@ -163,28 +229,49 @@ export const BookController = (routes) => {
                 image: selectedBus.image
             }
         };
+        const isNameValid = reservationData.name.every((n) => n.trim() !== '');
+        const isPhone = reservationData.phone.every((n) => n.trim() !== '');
+        const isEmail = reservationData.email.every((n) => n.trim() !== '');
+        const isPhoneValid = reservationData.phone.every((p) => phoneRegex.test(p));
+        const isEmailValid = reservationData.email.every((e) => emailRegex.test(e));
+        const isGender = reservationData.gender.every((g) => g.trim() !== '');
+        const hasDuplicatePhones = new Set(reservationData.phone).size !== phone.length;
+        const hasDuplicateEmails = new Set(reservationData.email).size !== email.length;
         if (
             !isNameValid  || 
-            !reservationData.phone || 
+            !isPhone || 
+            !isGender ||
             !reservationData.departure || 
             !reservationData.destination || 
             reservationData.guests <= 0|| 
             !reservationData.departureDate || 
-            !reservationData.email || 
-            !emailRegex.test(reservationData.email) || 
-            !phoneRegex.test(reservationData.phone)
+            !isEmail || 
+            !isPhoneValid || 
+            !isEmailValid ||
+            hasDuplicateEmails ||
+            hasDuplicatePhones
         ) {
             toast.dismiss();
-            if (!name || !phone || !departure || !destination || !guests || !departureDate || !email) {
+            if (!name || !phone || !gender || !departure || !destination || !guests || !departureDate || !email) {
                 toast.error("必須項目をすべて入力してください。");
             } else if (!isNameValid) {
                 toast.error("すべての名前を入力してください。"); 
+            } else if (!isGender) {
+                toast.error("すべての性別を入力してください。"); 
+            } else if (!isEmail) {
+                toast.error("すべてのメールを入力してください。"); 
+            } else if (!isPhone) {
+                toast.error("すべての電話番号を入力してください。"); 
             } else if(guests <= 0 ) {
                 toast.error('ゲストの人数は正の整数でなければなりません。');
-            } else if (!emailRegex.test(email)) {
+            } else if (!isEmailValid) {
                 toast.error("正しいメールアドレスを入力してください。");
-            } else if (!phoneRegex.test(phone)) {
+            } else if (!isPhoneValid) {
                 toast.error("正しい電話番号を入力してください。");
+            } else if (hasDuplicatePhones) {
+                toast.error("電話番号が重複しています。"); 
+            } else if (hasDuplicateEmails) {
+                toast.error("メールアドレスが重複しています。"); 
             }
             return;
         }

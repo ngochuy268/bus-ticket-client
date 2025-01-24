@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { useTheme, useMediaQuery } from '@mui/material';
 
 import { useManageController } from '../../../controllers/ManageController';
 
@@ -20,6 +22,9 @@ const Manage = ({busRoutes, setBusRoutes}) => {
         setSelectedBookId,
         setOpen
     } = useManageController(busRoutes, setBusRoutes);
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <>
@@ -81,21 +86,59 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                                 <div className="bus-info-super-wrapper">
                                                     {bookings.map((booking, index) => {
                                                         const namesArray = booking.names.split(', ');
+                                                        const phonesArray = booking.phones.split(', ');
+                                                        const emailsArray = booking.emails.split(', ');
+                                                        const gendersArray = booking.genders.split(', ');
                                                         return (
                                                             <div className="bus-info-wrapper" key={index}> 
                                                                 <div className="personal-info">
-                                                                    <p><span>名前：</span></p>
-                                                                    {namesArray.map((name, i) => (
-                                                                        <div key={i} style={{ marginLeft: '40px' }}>
-                                                                            {name}
+                                                                    {isMobile ? (
+                                                                        <div>
+                                                                            {namesArray.map((name, i) => (
+                                                                                <div key={i} style={{ marginBottom: '16px', padding: '16px', border: '1px solid #ddd', borderRadius: '8px' }}>
+                                                                                    <div><strong>名前:</strong> {name}</div>
+                                                                                    <div><strong>性別:</strong> {gendersArray[i]}</div>
+                                                                                    <div><strong>電話番号:</strong> {phonesArray[i]}</div>
+                                                                                    <div><strong>メール:</strong> {emailsArray[i]}</div>
+                                                                                </div>
+                                                                            ))}
                                                                         </div>
-                                                                    ))}
-                                                                    <p><span>電話番号：</span>{booking.bookphone}</p>
-                                                                    <p><span>メール：</span>{booking.bookemail}</p>
+                                                                    ) : (
+                                                                        <TableContainer component={Paper}>
+                                                                            <Table>
+                                                                                <TableHead>
+                                                                                    <TableRow>
+                                                                                        <TableCell sx={{ fontWeight: 'bold', borderBottom: '2px solid #ddd' }}>名前</TableCell>
+                                                                                        <TableCell sx={{ fontWeight: 'bold', borderBottom: '2px solid #ddd' }}>性別</TableCell>
+                                                                                        <TableCell sx={{ fontWeight: 'bold', borderBottom: '2px solid #ddd' }}>電話番号</TableCell>
+                                                                                        <TableCell sx={{ fontWeight: 'bold', borderBottom: '2px solid #ddd' }}>メール</TableCell>
+                                                                                    </TableRow>
+                                                                                </TableHead>
+                                                                                <TableBody>
+                                                                                    {namesArray.map((name, i) => (
+                                                                                        <TableRow key={i} sx={{ 
+                                                                                            '&:hover': { backgroundColor: '#f9f9f9' }, // Hiệu ứng hover
+                                                                                            borderBottom: '1px solid #ddd'
+                                                                                        }}>
+                                                                                            <TableCell>{name}</TableCell>
+                                                                                            <TableCell>{gendersArray[i]}</TableCell>
+                                                                                            <TableCell>{phonesArray[i]}</TableCell>
+                                                                                            <TableCell>{emailsArray[i]}</TableCell>
+                                                                                        </TableRow>
+                                                                                    ))}
+                                                                                </TableBody>
+                                                                            </Table>
+                                                                        </TableContainer>
+                                                                    )}
                                                                 </div>
                                                                 <div className="bus-info-depart-dest">
                                                                     <div className="bus-info">
-                                                                            <img src={require(`../../../images/${booking.bookimg}`)} alt="Bus" className="bus-image" />
+                                                                            <img src={
+                                                                                    booking.bookimg.startsWith('data:image') 
+                                                                                    ? booking.bookimg 
+                                                                                    : require(`../../../images/${booking.bookimg}`) 
+                                                                                }                           
+                                                                            alt="Bus" className="bus-image" />
                                                                         <div className="bus-details">
                                                                             <h4 style={{marginBottom: '15px'}}>{booking.bookbusname}</h4>
                                                                             <h6>{booking.bookbustype}</h6>
@@ -116,12 +159,12 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                                                                 <h2 style={{textAlign: 'right', fontSize: '25px'}}>💰 {booking.bookcost}￥</h2>
                                                                                 <h5 style={{color: '#afafaf', marginTop: '10px'}}>ゲストの数: {booking.bookguest}</h5>
                                                                             </div>       
+                                                                    </div>  
+                                                                    <div className="manage-btn">
+                                                                        <button className="btn btn-warning" onClick={handleEdit}>修理</button>
+                                                                        <button className="btn btn-danger" onClick={() => {setSelectedBookId({ bookid: booking.bookid, busid: booking.busid, bookguest: booking.bookguest }); setOpen(true); }}>削除</button>
                                                                     </div>        
-                                                                </div>                                             
-                                                                <div className="manage-btn">
-                                                                    <button className="btn btn-warning" onClick={handleEdit}>修理</button>
-                                                                    <button className="btn btn-danger" onClick={() => {setSelectedBookId({ bookid: booking.bookid, busid: booking.busid, bookguest: booking.bookguest }); setOpen(true); }}>削除</button>
-                                                                </div>                                                 
+                                                                </div>                                                                                                                                                           
                                                             </div>    
                                                         )                                                                                                               
                                                     })}                                                                                                   

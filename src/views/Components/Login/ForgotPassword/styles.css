@@ -1,0 +1,157 @@
+.forgot-password-wrapper {
+    overflow: hidden;
+    max-width: 390px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    place-items: center;
+  }
+
+.forgot-password{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 auto;
+  height: 100%;
+  width: 100%;
+  background-color: #232223;
+  margin: 0 auto;
+  place-items: center;
+}
+
+.forgot-password-wrapper input[type="button"] {
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff !important;
+  background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
+  transition: all 0.4s ease;
+  padding: 0 !important;
+}
+
+.forgot-password-wrapper input[type="button"]:hover{
+  transform: scale(1.05);
+}
+
+  
+  .forgot-password-wrapper .title-text {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .forgot-password-wrapper .title {
+    font-size: 35px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .forgot-password-wrapper .form-container {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .forgot-password-wrapper .form-inner {
+    display: flex;
+    width: 100%;
+  }
+  
+  .forgot-password-wrapper .form-inner form {
+    width: 100%;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .forgot-password-wrapper .form-inner form .field {
+    height: 50px;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .forgot-password-wrapper .form-inner form .field input {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    padding-left: 15px;
+    border-radius: 15px;
+    border: 1px solid lightgrey;
+    border-bottom-width: 2px;
+    font-size: 17px;
+    transition: all 0.3s ease;
+  }
+  
+  .forgot-password-wrapper .form-inner form .field input:focus {
+    border-color: #1a75ff;
+  }
+  
+  .forgot-password-wrapper .form-inner form .field input::placeholder {
+    color: #999;
+    transition: all 0.3s ease;
+  }
+  
+  .forgot-password-wrapper .form-inner form .field input:focus::placeholder {
+    color: #1a75ff;
+  }
+  
+  .forgot-password-wrapper .form-inner form .btn {
+    padding: 0;
+    height: 50px;
+    width: 100%;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  
+  .forgot-password-wrapper .form-inner form .btn .btn-layer {
+    height: 100%;
+    width: 300%;
+    position: absolute;
+    left: -100%;
+    background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
+    border-radius: 15px;
+    transition: all 0.4s ease;
+  }
+  
+  .forgot-password-wrapper .form-inner form .btn:hover .btn-layer {
+    left: 0;
+  }
+  
+  .forgot-password-wrapper .form-inner form .btn input[type="submit"] {
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    position: relative;
+    background: none;
+    border: none;
+    color: #fff;
+    padding-left: 0;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .forgot-password-wrapper .form-inner form .btn input[type="submit"]:hover {
+    transform: scale(1.05);
+  }
+  
+  .forgot-password-wrapper .form-inner form .signup-link {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .forgot-password-wrapper .form-inner form .signup-link a {
+    color: #1a75ff;
+    text-decoration: none;
+  }
+  
+  .forgot-password-wrapper .form-inner form .signup-link a:hover {
+    text-decoration: underline;
+  }
+
+  .forgot-password-wrapper .login-link:hover {
+    color: red !important;
+  }

@@ -16,21 +16,12 @@ export const useManageController = (busRoutes, setBusRoutes) => {
     const [error, setError] = useState(null);
     const [selectedBookId, setSelectedBookId] = useState(null);
     
-    const handleEdit = (e) => {
-        e.preventDefault();
-        toast.dismiss();
-        toast.warning('予約の変更については、カスタマーサービスにご連絡ください。'); 
-    }
-    
-    const handleClose = () => {
-        setOpen(false);
-    };
-    
+  
     // ------delete booking--------
     const handleDelete = async () => {
-        if (!selectedBookId) return;
+        if (!selectedBookId || !phone ) return;
         try {
-            const response = await deleteBooking(selectedBookId.bookid);
+            const response = await deleteBooking(selectedBookId.bookid, phone);
             if (response.status === 200) {
                 toast.dismiss();
                 toast.success('予約が正常に削除されました！');
@@ -45,7 +36,12 @@ export const useManageController = (busRoutes, setBusRoutes) => {
             }
         } catch (error) {
             console.error('予約の削除中にエラーが発生しました:', error);
-            toast.error(error.response?.data?.message || '予約を削除できませんでした!');
+            if (error.response?.data?.message === 'Phone does not match the guest with receiveCode = 1!') {
+                toast.error('この予約を削除する権利がありません。');
+            } else {
+                toast.error(error.response?.data?.message || '予約を削除できませんでした!');
+            }
+            return;
         } finally {
             setOpen(false);
             setSelectedBookId(null);
@@ -76,6 +72,18 @@ export const useManageController = (busRoutes, setBusRoutes) => {
         }
         setSearchTriggered(true);
     };
+    
+
+    const handleEdit = (e) => {
+        e.preventDefault();
+        toast.dismiss();
+        toast.warning('予約の変更については、カスタマーサービスにご連絡ください。'); 
+    }
+    
+    const handleClose = () => {
+        setOpen(false);
+    };
+    
 
     return {
         open, 

@@ -62,7 +62,12 @@ const Home = ({busRoutes}) => {
                                             <div className="row">
                                                 <div className="col-lg-4 col-sm-5">
                                                     <div className="image">
-                                                        <LazyLoadImage src={require(`../../../images/${item.image}`)} alt="" effect="blur"/>
+                                                        <LazyLoadImage src={
+                                                            item.image.startsWith('data:image') 
+                                                                ? item.image 
+                                                                : require(`../../../images/${item.image}`) 
+                                                        }
+                                                        alt="" effect="blur"/>
                                                         <div className="confirm-ticket">
                                                             即時確認    
                                                             <div className="point"></div> 

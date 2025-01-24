@@ -76,8 +76,8 @@ const Book = ({routes}) => {
                                 <div className="row">
                                     <div className="col-lg-12">
                                         <h4>この<em>フォーム</em>を通じて<em>予約</em>をしてください</h4>
-                                    </div>                                  
-                                    <div className="col-lg-4" >
+                                    </div>                                         
+                                    <div className="col-lg-3" >
                                         <fieldset>
                                             <label htmlFor='name' className="form-label">名前</label>
                                                 {formData.name.map((name, index) => {
@@ -97,16 +97,70 @@ const Book = ({routes}) => {
                                                 })}
                                         </fieldset>
                                     </div>                                   
-                                    <div className="col-lg-4">
+                                    <div className="col-lg-3">
                                         <fieldset>
-                                            <label htmlFor="Number" className="form-label">電話番号</label>
-                                            <input type="number" name="phone" className="Number"  placeholder="Ex. +xxx xxx xxx" autoComplete="on" required value={formData.phone} onChange={handleChange}/>
+                                            <label htmlFor="phone" className="form-label">電話番号</label>
+                                            {formData.phone.map((phone, index) => {
+                                                const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                return (
+                                                    <input
+                                                        key={index}
+                                                        type="number"
+                                                        name={`phone${index}`}
+                                                        className="Number"
+                                                        placeholder="Ex. +xxx xxx xxx"
+                                                        value={phone}
+                                                        onChange={handleChange}
+                                                        disabled={isDisabled}
+                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                    />
+                                                );
+                                            })}
                                         </fieldset>
                                     </div>
-                                    <div className="col-lg-4">
+                                    <div className="col-lg-3">
                                         <fieldset>
-                                            <label htmlFor="Number" className="form-label">メール</label>
-                                            <input type="text" name="email" className="Number"  placeholder="Ex. abc@gmail.com" autoComplete="on" required value={formData.email} onChange={handleChange}/>
+                                            <label htmlFor="email" className="form-label">メール</label>
+                                            {formData.email.map((email, index) => {
+                                                const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                return (
+                                                    <input
+                                                        key={index}
+                                                        type="text"
+                                                        name={`email${index}`}
+                                                        className="Number"
+                                                        placeholder="Ex. abc@gmail.com"
+                                                        value={email}
+                                                        onChange={handleChange}
+                                                        disabled={isDisabled}
+                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                    />
+                                                );
+                                            })}
+                                        </fieldset>
+                                    </div>
+                                    <div className="col-lg-3">
+                                        <fieldset>
+                                            <label htmlFor="gender" className="form-label">性別</label>
+                                            {formData.gender.map((gender, index) => {
+                                                const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                return (
+                                                    <select
+                                                        key={index}
+                                                        name={`gender${index}`}
+                                                        className="form-select"
+                                                        value={gender}
+                                                        onChange={handleChange}
+                                                        disabled={isDisabled}
+                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                    >
+                                                        <option value="">性別を選択</option>
+                                                        <option value="男">男</option>
+                                                        <option value="女">女</option>
+                                                        <option value="別">別</option>
+                                                    </select>
+                                                );
+                                            })}
                                         </fieldset>
                                     </div>
                                     <div className="col-lg-6">
@@ -180,7 +234,12 @@ const Book = ({routes}) => {
                                                                                 <div className="row">
                                                                                     <div className="col-lg-3">
                                                                                         <div className="bus-left">
-                                                                                            <img src={require(`../../../images/${bus.image}`)} alt="Bus Image" className="bus-image" />  
+                                                                                            <img src={
+                                                                                                bus.image.startsWith('data:image') 
+                                                                                                ? bus.image 
+                                                                                                : require(`../../../images/${bus.image}`) 
+                                                                                            }
+                                                                                            alt="Bus Image" className="bus-image" />  
                                                                                             <div className="confirm-ticket">
                                                                                                     即時確認    
                                                                                                 <div className="point"></div> 
@@ -215,13 +274,13 @@ const Book = ({routes}) => {
                                                                                                 <div className="discount">VIP</div>
                                                                                                 {bus.seat > 0 ? 
                                                                                                 <p>まだ {bus.seat} 席空いています</p>  
-                                                                                                : <p>もう席がありません</p>
+                                                                                                : <p style={{color: 'red'}}>もう席がありません</p>
                                                                                                 }                                                                    
                                                                                             </div>
                                                                                            {bus.seat > 0 ? 
                                                                                            <button className="book-button" onClick={() => handleClickOpen(bus)}>予約</button> 
                                                                                            :
-                                                                                            <button className="book-button" disabled>予約</button>}                                 
+                                                                                            <button className="book-button" disabled style={{ backgroundColor: '#ebebeb', border: 'none'}}>予約</button>}                                 
                                                                                         </div>
                                                                                     </div>         
                                                                                 </div>    
@@ -234,7 +293,7 @@ const Book = ({routes}) => {
                                                     </div>
                                                 </div>    
                                     ): (
-                                        <p>No matching buses found.</p>
+                                        <p style={{color: 'red'}}>一致するバスが見つかりません。</p>
                                     )}  
                                         </>
                                     )}               

@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-export const deleteBooking = async (bookid) => {
+export const deleteBooking = async (bookid, phone) => {
     try {
-        const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/bookings/${bookid}`);
+        const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/bookings/${bookid}`, 
+            {data: { phone }
+        });
         return response;
     } catch (error) {
         throw error;

@@ -35,36 +35,90 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                                     <div className="col-lg-12">
                                         <h4><em>予約確認</em>を<em>して</em>ください</h4>
                                     </div>
-                                    <div className="col-lg-4">
+                                    <div className="col-lg-3" >
                                         <fieldset>
-                                            <label htmlFor="Name" className="form-label">名前</label>                                           
+                                            <label htmlFor='name' className="form-label">名前</label>
                                                 {formData.name.map((name, index) => {
                                                     const isDisabled = formData.guests === 0 || index >= formData.guests;
-                                                    return (                                                                                                             
+                                                    return (
                                                         <input
-                                                            key={index}
-                                                            type="text"
-                                                            name={`name${index}`}
-                                                            className="Name"
-                                                            value={name}
-                                                            onChange={handleChange}
-                                                            disabled={isDisabled}
-                                                            style={isDisabled ? { cursor: 'not-allowed' } : {}}
-                                                        />
+                                                        key={index}
+                                                        type="text"
+                                                        name={`name${index}`}
+                                                        className="Name"
+                                                        value={name}
+                                                        onChange={handleChange}
+                                                        disabled={isDisabled}
+                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                    />
                                                     )                                               
                                                 })}
                                         </fieldset>
-                                    </div>
-                                    <div className="col-lg-4">
+                                    </div>                                   
+                                    <div className="col-lg-3">
                                         <fieldset>
-                                            <label htmlFor="Number" className="form-label">電話番号</label>
-                                            <input type="number" name="phone" className="Number" autoComplete="on" required value={formData.phone} onChange={handleChange}/>
+                                            <label htmlFor="phone" className="form-label">電話番号</label>
+                                            {formData.phone.map((phone, index) => {
+                                                const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                return (
+                                                    <input
+                                                        key={index}
+                                                        type="number"
+                                                        name={`phone${index}`}
+                                                        className="Number"
+                                                        placeholder="Ex. +xxx xxx xxx"
+                                                        value={phone}
+                                                        onChange={handleChange}
+                                                        disabled={isDisabled}
+                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                    />
+                                                );
+                                            })}
                                         </fieldset>
                                     </div>
-                                    <div className="col-lg-4">
+                                    <div className="col-lg-3">
                                         <fieldset>
-                                            <label htmlFor="Number" className="form-label">メール</label>
-                                            <input type="text" name="email" className="Number" autoComplete="on" required value={formData.email} onChange={handleChange}/>
+                                            <label htmlFor="email" className="form-label">メール</label>
+                                            {formData.email.map((email, index) => {
+                                                const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                return (
+                                                    <input
+                                                        key={index}
+                                                        type="text"
+                                                        name={`email${index}`}
+                                                        className="Number"
+                                                        placeholder="Ex. abc@gmail.com"
+                                                        value={email}
+                                                        onChange={handleChange}
+                                                        disabled={isDisabled}
+                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                    />
+                                                );
+                                            })}
+                                        </fieldset>
+                                    </div>
+                                    <div className="col-lg-3">
+                                        <fieldset>
+                                            <label htmlFor="gender" className="form-label">性別</label>
+                                            {formData.gender.map((gender, index) => {
+                                                const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                return (
+                                                    <select
+                                                        key={index}
+                                                        name={`gender${index}`}
+                                                        className="form-select"
+                                                        value={gender}
+                                                        onChange={handleChange}
+                                                        disabled={isDisabled}
+                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                    >
+                                                        <option value="">性別を選択</option>
+                                                        <option value="男">男</option>
+                                                        <option value="女">女</option>
+                                                        <option value="別">別</option>
+                                                    </select>
+                                                );
+                                            })}
                                         </fieldset>
                                     </div>
                                     <div className="col-lg-6">
@@ -107,7 +161,13 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                                                                 <div className="row">
                                                                     <div className="col-lg-3">
                                                                         <div className="bus-left">
-                                                                            <img src={require(`../../../images/${formData.selectedBus.image}`)} alt="Bus Image" className="bus-image" />  
+                                                                            <img 
+                                                                                src={
+                                                                                    formData.selectedBus.image.startsWith('data:image') 
+                                                                                    ? formData.selectedBus.image 
+                                                                                    : require(`../../../images/${formData.selectedBus.image}`) 
+                                                                                }
+                                                                            alt="Bus Image" className="bus-image" />  
                                                                             <div className="confirm-ticket">
                                                                                     即時確認    
                                                                                 <div className="point"></div> 

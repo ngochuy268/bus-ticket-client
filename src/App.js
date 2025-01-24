@@ -2,7 +2,6 @@ import { useBusRoutes } from './controllers/busRouteController';
 import Loading from './views/Components/Loading/Loading';
 import { ToastContainer } from 'react-toastify';
 import AppRoutes from './routes/AppRoutes';
-import { useState } from 'react';
 
 function App() {
   const { routes, busRoutes, loading, setBusRoutes } = useBusRoutes();

@@ -2180,11 +2180,17 @@ Reservation Page Style
 
 .bus-info-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 1400px) {
+  .bus-info-wrapper {
+    flex-direction: column;
+  }
 }
 
 .bus-info-wrapper .personal-info {
@@ -2246,9 +2252,10 @@ Reservation Page Style
 
 .bus-info-wrapper{
   margin: 10px;
-  max-width: 500px;
   flex: 1 1 300px;
 }
+
+
 
 .bus-info-super-wrapper{
   display: flex;

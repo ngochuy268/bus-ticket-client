@@ -1,0 +1,161 @@
+.bus-manage {
+    padding: 40px;
+    position: relative;
+}
+
+.bus-manage h1 {
+    color: white;
+}
+
+.bus-manage .log-out-btn {
+    display: block;
+    margin: 20px ;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bus-manage .log-out-btn:hover {
+    background-color: #0056b3;
+}
+
+.bus-manage .add-bus-btn {
+    display: block;
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #33ff00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bus-manage .add-bus-btn:hover{
+    background-color: #1f9b00;
+}
+
+.bus-list {
+    margin-top: 20px;
+}
+
+.bus-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.bus-item h2 {
+    margin-top: 0;
+}
+
+.bus-list h3 {
+    margin-top: 30px;
+}
+
+.bus-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.route-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.route-item {
+    border-top: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.route-item p {
+    margin: 5px 0;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.show-more-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.show-more-btn:hover {
+    background-color: #0056b3;
+}
+
+.scroll-to-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 40px;
+    width: 50px;
+    height: 50px; 
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-to-top-btn:hover {
+    background-color: #0056b3;
+}
+
+
+/* Delete Edit button */
+.bus-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn {
+    padding: 5px 10px;
+    background-color: #4CAF50; /* Màu xanh lá */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    background-color: #45a049;
+}
+
+.delete-btn {
+    padding: 5px 10px;
+    background-color: #f44336; /* Màu đỏ */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #e53935;
+}

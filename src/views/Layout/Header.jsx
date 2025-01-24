@@ -52,6 +52,7 @@ const Header = () => {
                                     <li><Link to={'/book'} onClick={closeMenu}>予約</Link></li>
                                     <li><Link to={'/manage'} onClick={closeMenu}>管理</Link></li>
                                     <li><Link to={'/contact'} onClick={closeMenu}>連絡</Link></li>
+                                    <li><Link to={'/login'} onClick={closeMenu}>ログイン</Link></li>
                                 </ul>
                                 <a className='menu-trigger' onClick={toggleMenu} ref={triggerRef}>
                                     <span>{isMenuOpen ? 'Close' : 'Menu'}</span>
