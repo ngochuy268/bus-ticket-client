@@ -11,6 +11,7 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
     const navigate = useNavigate();
     const [paypalDialogOpen, setPaypalDialogOpen] = useState(false); 
     const [formData, setFormData] = useState(reservationData);
+    const [openCancelDialog, setOpenCancelDialog] = useState(false);
 
     // -------------予約フォーム----------------------
     useEffect(() => {
@@ -219,6 +220,14 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         });
     };
 
+    const handleCancel = () => {
+        setOpenCancelDialog(true); 
+    }
+    const handleConfirmCancel = () => {
+        setOpenCancelDialog(false); // Đóng Dialog xác nhận
+        navigate('/book'); // Chuyển hướng
+    };
+
     return {
         calculateTravelTime,
         handleChange,
@@ -226,7 +235,10 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         handleOpenPaypal,
         handlePaypalClose,
         paypalDialogOpen,
-        onPayPalApprove
+        onPayPalApprove,
+        handleCancel,
+        handleConfirmCancel,
+        openCancelDialog
     }
 }
 

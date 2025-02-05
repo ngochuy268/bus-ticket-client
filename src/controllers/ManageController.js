@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { deleteBooking, fetchBookings } from '../models/ManageModel';
+import { deleteBooking, fetchBookings, updateBooking } from '../models/ManageModel';
 
 export const useManageController = (busRoutes, setBusRoutes) => {
 
@@ -73,15 +73,92 @@ export const useManageController = (busRoutes, setBusRoutes) => {
         setSearchTriggered(true);
     };
     
-
-    const handleEdit = (e) => {
-        e.preventDefault();
-        toast.dismiss();
-        toast.warning('予約の変更については、カスタマーサービスにご連絡ください。'); 
-    }
     
     const handleClose = () => {
         setOpen(false);
+    };
+
+    // Edit------------
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedBooking, setSelectedBooking] = useState(null);
+    const [editedData, setEditedData] = useState([]); 
+
+    const handleEditClick = (booking) => {
+        setSelectedBooking(booking);
+
+        const names = booking.names.split(', ');
+        const nameids = booking.nameids.split(', ');
+        const genders = booking.genders.split(', ');
+        const phones = booking.phones.split(', ');
+        const emails = booking.emails.split(', ');
+
+        const initialData = names.map((name, index) => ({
+            nameid: nameids[index],
+            name,          
+            gender: genders[index],
+            phone: phones[index],
+            email: emails[index],
+        }));
+
+        setEditedData(initialData); 
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    const handleSave = async () => {
+
+        for (const passenger of editedData) {
+            if (!passenger.name || !passenger.gender || !passenger.phone || !passenger.email) {
+                toast.error('すべてのフィールドを入力してください。');
+                return;
+            }
+        }
+
+        if (!selectedBooking.bookdeparttime || !selectedBooking.bookarrivaltime) {
+            toast.error('出発日と到着日を入力してください。');
+            return;
+        }
+
+        try {
+            const updatedData = {
+                passengers: editedData,
+                commonInfo: {
+                    bookdeparttime: selectedBooking.bookdeparttime, 
+                    bookarrivaltime: selectedBooking.bookarrivaltime,
+                },
+            };
+
+            await updateBooking(selectedBooking.bookid, updatedData);
+            setBookings((prevBookings) =>
+                prevBookings.map((booking) =>
+                    booking.bookid === selectedBooking.bookid
+                        ? {
+                            ...booking,
+                            names: editedData.map((passenger) => passenger.name).join(', '),
+                            genders: editedData.map((passenger) => passenger.gender).join(', '),
+                            phones: editedData.map((passenger) => passenger.phone).join(', '),
+                            emails: editedData.map((passenger) => passenger.email).join(', '),
+                            bookdeparttime: updatedData.commonInfo.bookdeparttime,
+                            bookarrivaltime: updatedData.commonInfo.bookarrivaltime,
+                        }
+                        : booking
+                )
+            );
+            toast.success('予約が正常に更新されました！');   
+            handleCloseDialog();
+        } catch (error) {
+            toast.error('予約の更新に失敗しました。');
+            console.error('Error updating booking:', error);
+        }
+    };
+
+    const handleChange = (index, field, value) => {
+        const updatedData = [...editedData];
+        updatedData[index][field] = value;
+        setEditedData(updatedData);
     };
     
 
@@ -91,13 +168,21 @@ export const useManageController = (busRoutes, setBusRoutes) => {
         phone, 
         email,
         bookings,
-        handleEdit, 
         handleClose, 
         handleDelete,
         fetchBookingsByPhone,
         setPhone,
         setEmail,
         setSelectedBookId,
-        setOpen
+        setOpen,
+        setBookings,
+        handleEditClick,
+        selectedBooking,
+        openDialog,
+        setOpenDialog,
+        editedData,
+        handleChange,
+        handleSave,
+        setSelectedBooking
     };
 }

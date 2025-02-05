@@ -15,6 +15,10 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
         handlePaypalClose,
         paypalDialogOpen,
         onPayPalApprove,
+        handleCancel,
+        setOpenCancelDialog,
+        handleConfirmCancel,
+        openCancelDialog
     } = ConfirmController(reservationData, busRoutes, setBusRoutes);
 
     const style = {
@@ -212,11 +216,19 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                                             </div>
                                         </div>
                                         <div className="col-lg-12">
-                                            <button className="search-button" style={{marginBottom : '30px', width: 'fit-content'}}
-                                                onClick={handleOpenPaypal}
-                                            >
-                                                予約
-                                            </button>
+                                            <div className="control-btn">
+                                                <button className="search-button" style={{marginBottom : '30px', width: 'fit-content'}}
+                                                    onClick={handleOpenPaypal}
+                                                >
+                                                    予約
+                                                </button>
+                                                <button className="cancel-button" style={{marginBottom : '30px', width: 'fit-content'}}
+                                                    onClick={handleCancel}
+                                                >
+                                                    キャンセル
+                                                </button>
+                                            </div>
+                                            
                                         </div>     
                                     </div>                                                               
                                 </div>
@@ -266,6 +278,18 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                 >
                     キャンセル
                 </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Cancel Dialog */}
+            <Dialog open={openCancelDialog} onClose={() => setOpenCancelDialog(false)}>
+                <DialogTitle>確認</DialogTitle>
+                <DialogContent>
+                    本当に予約をキャンセルしますか？
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenCancelDialog(false)}>いいえ</Button>
+                    <Button onClick={handleConfirmCancel} color="error">はい</Button>
                 </DialogActions>
             </Dialog>
         </>

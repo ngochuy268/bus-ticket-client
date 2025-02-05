@@ -1,8 +1,6 @@
-import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button } from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { useTheme, useMediaQuery } from '@mui/material';
-
 import { useManageController } from '../../../controllers/ManageController';
 
 const Manage = ({busRoutes, setBusRoutes}) => {
@@ -13,14 +11,21 @@ const Manage = ({busRoutes, setBusRoutes}) => {
         phone, 
         email,
         bookings,
-        handleEdit, 
         handleClose, 
         handleDelete,
         fetchBookingsByPhone,
         setPhone,
         setEmail,
         setSelectedBookId,
-        setOpen
+        setOpen,
+        selectedBooking,
+        openDialog,
+        setOpenDialog,
+        editedData,
+        handleChange,
+        handleSave,
+        setSelectedBooking,
+        handleEditClick
     } = useManageController(busRoutes, setBusRoutes);
 
     const theme = useTheme();
@@ -30,7 +35,7 @@ const Manage = ({busRoutes, setBusRoutes}) => {
         <>
             <div className="second-page-heading">
             </div>
-             <div className="reservation-form">
+            <div className="reservation-form">
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-12">
@@ -68,8 +73,7 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                     </div>                                   
                                 </div>
                             </div>
-                        </div>
-                        
+                        </div>                       
                     </div>
                 </div>
             </div>
@@ -161,7 +165,7 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                                                                             </div>       
                                                                     </div>  
                                                                     <div className="manage-btn">
-                                                                        <button className="btn btn-warning" onClick={handleEdit}>修理</button>
+                                                                        <button className="btn btn-warning" onClick={() => handleEditClick(booking)}>修理</button>
                                                                         <button className="btn btn-danger" onClick={() => {setSelectedBookId({ bookid: booking.bookid, busid: booking.busid, bookguest: booking.bookguest }); setOpen(true); }}>削除</button>
                                                                     </div>        
                                                                 </div>                                                                                                                                                           
@@ -194,6 +198,88 @@ const Manage = ({busRoutes, setBusRoutes}) => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            {selectedBooking && (
+                <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md">
+                    <DialogTitle style={{fontWeight: '700', fontSize: '30px'}}>予約編集</DialogTitle>
+                    <DialogContent>
+                        <TableContainer component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell sx={{ fontWeight: 'bold' }}>名前</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold' }}>性別</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold' }}>電話番号</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold' }}>メール</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {editedData.map((row, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell>
+                                                <TextField
+                                                    value={row.name}
+                                                    onChange={(e) =>
+                                                        handleChange(index, 'name', e.target.value)
+                                                    }
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <TextField
+                                                    value={row.gender}
+                                                    onChange={(e) =>
+                                                        handleChange(index, 'gender', e.target.value)
+                                                    }
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <TextField
+                                                    value={row.phone}
+                                                    onChange={(e) =>
+                                                        handleChange(index, 'phone', e.target.value)
+                                                    }
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <TextField
+                                                    value={row.email}
+                                                    onChange={(e) =>
+                                                        handleChange(index, 'email', e.target.value)
+                                                    }
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TextField
+                            margin="dense"
+                            sx={{ marginTop: '16px' }}
+                            label="出発日"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            value={selectedBooking.bookdeparttime}
+                            onChange={(e) => setSelectedBooking({ ...selectedBooking, bookdeparttime: e.target.value })}
+
+                        />
+                        <TextField
+                            margin="dense"
+                            label="帰国日"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            value={selectedBooking.bookarrivaltime}
+                            onChange={(e) => setSelectedBooking({ ...selectedBooking, bookarrivaltime: e.target.value })}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setOpenDialog(false)} color="secondary">キャンセル</Button>
+                        <Button onClick={handleSave} color="primary">保存</Button>
+                    </DialogActions>
+                </Dialog>
+            )}
         </>
     )
 

@@ -2193,8 +2193,13 @@ Reservation Page Style
   }
 }
 
+.bus-info-depart-dest {
+  width: 100%;
+}
+
 .bus-info-wrapper .personal-info {
-  padding: 20px 20px 0 20px;
+  width: 100%;
+  padding: 20px ;
 }
 
 .bus-info-wrapper .personal-info span {
@@ -2490,4 +2495,14 @@ body {
   .weekly-offers .container-fluid {
     padding: 0px;
   }
+}
+
+.control-btn {
+  display: flex;
+  justify-content: space-between;
+}
+
+.control-btn .cancel-button {
+  background-color: red !important;
+  border: none !important;
 }
