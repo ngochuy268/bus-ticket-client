@@ -228,65 +228,68 @@ const Book = ({routes}) => {
                                                         <div className="container">
                                                             <div className="row">
                                                                 <div className="col-lg-12">
-                                                                    {routesByDepartAndDest.map((bus, index) => (
-                                                                        <div className="bus-book-info" key={index}>
-                                                                            <div className="container">
-                                                                                <div className="row">
-                                                                                    <div className="col-lg-3">
-                                                                                        <div className="bus-left">
-                                                                                            <img src={
-                                                                                                bus.image.startsWith('data:image') 
-                                                                                                ? bus.image 
-                                                                                                : require(`../../../images/${bus.image}`) 
-                                                                                            }
-                                                                                            alt="Bus Image" className="bus-image" />  
-                                                                                            <div className="confirm-ticket">
-                                                                                                    即時確認    
-                                                                                                <div className="point"></div> 
-                                                                                            </div>       
-                                                                                                                                    
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div className="col-lg-6">
-                                                                                        <div className="bus-middle">
-                                                                                            <h4>{bus.busname}</h4>
-                                                                                            <h6>{bus.bustype}</h6>
-                                                                                            <div className="rating">
-                                                                                                <span className="stars">⭐ {bus.rate}</span>
-                                                                                                <span className="reviews">(1349)</span>
+                                                                    {routesByDepartAndDest.map((bus, index) => {
+                                                                        const totalCost = bus.cost * formData.guests * (formData.returnDate ? 2 : 1);
+                                                                        return (
+                                                                            <div className="bus-book-info" key={index}>
+                                                                                <div className="container">
+                                                                                    <div className="row">
+                                                                                        <div className="col-lg-3">
+                                                                                            <div className="bus-left">
+                                                                                                <img src={
+                                                                                                    bus.image.startsWith('data:image') 
+                                                                                                    ? bus.image 
+                                                                                                    : require(`../../../images/${bus.image}`) 
+                                                                                                }
+                                                                                                alt="Bus Image" className="bus-image" />  
+                                                                                                <div className="confirm-ticket">
+                                                                                                        即時確認    
+                                                                                                    <div className="point"></div> 
+                                                                                                </div>       
+                                                                                                                                        
                                                                                             </div>
-                                                                                            <p>{bus.type}</p>
-                                                                                            <div className="schedule">
-                                                                                                <div className="time">
-                                                                                                    <span>🕒 {bus.departtime}</span> <span>• {bus.depart}</span>
+                                                                                        </div>
+                                                                                        <div className="col-lg-6">
+                                                                                            <div className="bus-middle">
+                                                                                                <h4>{bus.busname}</h4>
+                                                                                                <h6>{bus.bustype}</h6>
+                                                                                                <div className="rating">
+                                                                                                    <span className="stars">⭐ {bus.rate}</span>
+                                                                                                    <span className="reviews">(1349)</span>
                                                                                                 </div>
-                                                                                                <p style={{textAlign: 'center'}}>{calculateTravelTime(bus.departtime, bus.arrivaltime)}</p>
-                                                                                                <div className="time">
-                                                                                                    <span>🕒 {bus.arrivaltime}</span> <span>• {bus.dest}</span>
+                                                                                                <p>{bus.type}</p>
+                                                                                                <div className="schedule">
+                                                                                                    <div className="time">
+                                                                                                        <span>🕒 {bus.departtime}</span> <span>• {bus.depart}</span>
+                                                                                                    </div>
+                                                                                                    <p style={{textAlign: 'center'}}>{calculateTravelTime(bus.departtime, bus.arrivaltime)}</p>
+                                                                                                    <div className="time">
+                                                                                                        <span>🕒 {bus.arrivaltime}</span> <span>• {bus.dest}</span>
+                                                                                                    </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div className="col-lg-3">
-                                                                                        <div className="bus-right">
-                                                                                            <div className="price">
-                                                                                                <span>{bus.cost}￥</span>
-                                                                                                <div className="discount">VIP</div>
-                                                                                                {bus.seat > 0 ? 
-                                                                                                <p>まだ {bus.seat} 席空いています</p>  
-                                                                                                : <p style={{color: 'red'}}>もう席がありません</p>
-                                                                                                }                                                                    
+                                                                                        <div className="col-lg-3">
+                                                                                            <div className="bus-right">
+                                                                                                <div className="price">
+                                                                                                    <span>{totalCost}￥</span>
+                                                                                                    <div className="discount">VIP</div>
+                                                                                                    {bus.seat > 0 ? 
+                                                                                                    <p>まだ {bus.seat} 席空いています</p>  
+                                                                                                    : <p style={{color: 'red'}}>もう席がありません</p>
+                                                                                                    }                                                                    
+                                                                                                </div>
+                                                                                            {bus.seat > 0 ? 
+                                                                                            <button className="book-button" onClick={() => handleClickOpen({ ...bus, totalCost })}>予約</button> 
+                                                                                            :
+                                                                                                <button className="book-button" disabled style={{ backgroundColor: '#ebebeb', border: 'none'}}>予約</button>}                                 
                                                                                             </div>
-                                                                                           {bus.seat > 0 ? 
-                                                                                           <button className="book-button" onClick={() => handleClickOpen(bus)}>予約</button> 
-                                                                                           :
-                                                                                            <button className="book-button" disabled style={{ backgroundColor: '#ebebeb', border: 'none'}}>予約</button>}                                 
-                                                                                        </div>
-                                                                                    </div>         
-                                                                                </div>    
-                                                                            </div>                                                                                                                        
-                                                                        </div>    
-                                                                    ))}                                                                                 
+                                                                                        </div>         
+                                                                                    </div>    
+                                                                                </div>                                                                                                                        
+                                                                            </div>    
+                                                                        )
+                                                                    })}                                                                                 
                                                                 </div>                                                                                 
                                                             </div>
                                                         </div>

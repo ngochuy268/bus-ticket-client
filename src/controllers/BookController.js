@@ -33,6 +33,7 @@ export const BookController = (routes) => {
         returnDate: '',
         receiveCode: initialReceiveCode
     }); 
+
     // ---------------Route List--------------------
         useEffect(() => {
             const allDeparts = routes.map(route => route.depart);
@@ -224,7 +225,7 @@ export const BookController = (routes) => {
                 type: selectedBus.bustype,
                 departtime: selectedBus.departtime,
                 arrivaltime: selectedBus.arrivaltime,
-                cost: selectedBus.cost,
+                cost: selectedBus.totalCost,
                 seat: selectedBus.seat,
                 image: selectedBus.image
             }

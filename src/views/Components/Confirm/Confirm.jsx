@@ -26,6 +26,8 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
         backgroundColor: '#ebebeb'
     }
 
+    const totalCost = formData.selectedBus.cost * formData.guests;
+
     return (
        <>
            <div className="second-page-heading">
@@ -201,8 +203,8 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                                                                     </div>
                                                                     <div className="col-lg-3">
                                                                         <div className="bus-right">
-                                                                            <div className="price">
-                                                                                <span>{formData.selectedBus.cost}￥</span>
+                                                                            <div className="price"> 
+                                                                                <span>{totalCost}￥</span>                                                                         
                                                                                 <div className="discount">VIP</div>   
                                                                             </div>
                                                                         </div>
