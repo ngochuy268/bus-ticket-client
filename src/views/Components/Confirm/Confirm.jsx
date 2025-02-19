@@ -18,7 +18,8 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
         handleCancel,
         setOpenCancelDialog,
         handleConfirmCancel,
-        openCancelDialog
+        openCancelDialog,
+        totalCost,
     } = ConfirmController(reservationData, busRoutes, setBusRoutes);
 
     const style = {
@@ -26,7 +27,7 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
         backgroundColor: '#ebebeb'
     }
 
-    const totalCost = formData.selectedBus.cost * formData.guests;
+
 
     return (
        <>
@@ -259,7 +260,7 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                             purchase_units: [
                                 {
                                     amount: {
-                                        value: formData.selectedBus ? formData.selectedBus.cost : "0", 
+                                        value: formData.selectedBus ? totalCost : "0", 
                                     },
                                 },
                             ],

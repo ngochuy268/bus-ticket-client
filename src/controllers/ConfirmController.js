@@ -20,11 +20,14 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         }
     }, [reservationData]);
 
+    const totalCost = formData.selectedBus.cost * formData.guests * (formData.returnDate ? 2 : 1);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
 
         if (name === 'guests') {
             const guestsCount = parseInt(value) || 0;
+
 
             setFormData((prev) => {
                 const updatedNames = [...prev.name];
@@ -53,7 +56,7 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
                     phone: updatedPhones,
                     email: updatedEmails,
                     gender: updatedGenders,
-                    receiveCode: guestsCount > 1 ? 1 : 0
+                    receiveCode: guestsCount > 1 ? 1 : 0,
                 };
             });
         } else if (name.startsWith('name')) {
@@ -91,7 +94,6 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
             }));
         }
     };
-
     // ------------移動時間を計算する-------------------
     const calculateTravelTime = (departtime, arrivaltime) => {
         const [departHour, departMinute] = departtime.split(':').map(Number);
@@ -122,6 +124,7 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         return result;
     };
 
+
     // ------------予約を送信-------------------
     const handleSubmit = async () => {
         try {
@@ -129,7 +132,18 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
             const updatedFormData = {
                 ...formData,
                 confirmCode,
-                returnDate: formData.returnDate || null
+                returnDate: formData.returnDate || null,
+                selectedBus: {
+                    busid: formData.selectedBus.busid,
+                    busname: formData.selectedBus.busname,
+                    rate: formData.selectedBus.rate,
+                    type: formData.selectedBus.type,
+                    departtime: formData.selectedBus.departtime,
+                    arrivaltime: formData.selectedBus.arrivaltime,
+                    cost: totalCost, 
+                    seat: formData.selectedBus.seat,
+                    image: formData.selectedBus.image
+                }
             };
             const response = await createBooking(updatedFormData);
             if (response.status === 200) {
@@ -238,7 +252,8 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         onPayPalApprove,
         handleCancel,
         handleConfirmCancel,
-        openCancelDialog
+        openCancelDialog,
+        totalCost,
     }
 }
 

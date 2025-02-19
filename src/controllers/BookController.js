@@ -54,6 +54,7 @@ export const BookController = (routes) => {
         if (name === 'guests') {
             const guestsCount = parseInt(value) || 0;
 
+
             setFormData((prev) => {
                 const updatedNames = [...prev.name];
                 const updatedPhones = [...prev.phone];
@@ -205,7 +206,9 @@ export const BookController = (routes) => {
     const handleConfirm = () => {
         const { name, phone, email, gender, guests, departureDate, returnDate, departure, destination, receiveCode } = formData;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneRegex = /^\d{10,11}$/;       
+        const phoneRegex = /^\d{10,11}$/;
+        const totalCost = selectedBus.cost * formData.guests * (formData.returnDate ? 2 : 1);
+
         const reservationData = {
             name,
             phone,
@@ -225,7 +228,7 @@ export const BookController = (routes) => {
                 type: selectedBus.bustype,
                 departtime: selectedBus.departtime,
                 arrivaltime: selectedBus.arrivaltime,
-                cost: selectedBus.totalCost,
+                cost: selectedBus.cost,
                 seat: selectedBus.seat,
                 image: selectedBus.image
             }
