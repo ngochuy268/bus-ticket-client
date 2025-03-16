@@ -76,12 +76,22 @@ const Book = ({routes}) => {
                                 <div className="row">
                                     <div className="col-lg-12">
                                         <h4>この<em>フォーム</em>を通じて<em>予約</em>をしてください</h4>
-                                    </div>                                         
+                                    </div>             
+                                    {formData.guests > 1 && (
+                                        <div className="col-lg-12 mb-3">
+                                            <div className="alert alert-warning">
+                                                <small>
+                                                    <strong>注意:</strong> 黄色で強調表示されたフィールドは、予約を削除できる権限を持つゲストです。
+                                                </small>
+                                            </div>
+                                        </div>
+                                    )}                            
                                     <div className="col-lg-3" >
                                         <fieldset>
                                             <label htmlFor='name' className="form-label">名前</label>
                                                 {formData.name.map((name, index) => {
                                                     const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                    const isPrimaryGuest = index === 0 && formData.guests > 1;
                                                     return (
                                                         <input
                                                         key={index}
@@ -91,7 +101,12 @@ const Book = ({routes}) => {
                                                         value={name}
                                                         onChange={handleChange}
                                                         disabled={isDisabled}
-                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                        style={isDisabled ? 
+                                                            { cursor: 'not-allowed' } : 
+                                                            isPrimaryGuest ? 
+                                                                { backgroundColor: '#fff8e1', borderColor: '#ffc107', borderWidth: '2px' } : 
+                                                                {}
+                                                        }
                                                     />
                                                     )                                               
                                                 })}
@@ -102,6 +117,7 @@ const Book = ({routes}) => {
                                             <label htmlFor="phone" className="form-label">電話番号</label>
                                             {formData.phone.map((phone, index) => {
                                                 const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                const isPrimaryGuest = index === 0 && formData.guests > 1;
                                                 return (
                                                     <input
                                                         key={index}
@@ -112,7 +128,12 @@ const Book = ({routes}) => {
                                                         value={phone}
                                                         onChange={handleChange}
                                                         disabled={isDisabled}
-                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                        style={isDisabled ? 
+                                                            { cursor: 'not-allowed' } : 
+                                                            isPrimaryGuest ? 
+                                                                { backgroundColor: '#fff8e1', borderColor: '#ffc107', borderWidth: '2px' } : 
+                                                                {}
+                                                        }
                                                     />
                                                 );
                                             })}
@@ -123,6 +144,7 @@ const Book = ({routes}) => {
                                             <label htmlFor="email" className="form-label">メール</label>
                                             {formData.email.map((email, index) => {
                                                 const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                const isPrimaryGuest = index === 0 && formData.guests > 1;
                                                 return (
                                                     <input
                                                         key={index}
@@ -133,7 +155,12 @@ const Book = ({routes}) => {
                                                         value={email}
                                                         onChange={handleChange}
                                                         disabled={isDisabled}
-                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                        style={isDisabled ? 
+                                                            { cursor: 'not-allowed' } : 
+                                                            isPrimaryGuest ? 
+                                                                { backgroundColor: '#fff8e1', borderColor: '#ffc107', borderWidth: '2px' } : 
+                                                                {}
+                                                        }
                                                     />
                                                 );
                                             })}
@@ -144,6 +171,7 @@ const Book = ({routes}) => {
                                             <label htmlFor="gender" className="form-label">性別</label>
                                             {formData.gender.map((gender, index) => {
                                                 const isDisabled = formData.guests === 0 || index >= formData.guests;
+                                                const isPrimaryGuest = index === 0 && formData.guests > 1;
                                                 return (
                                                     <select
                                                         key={index}
@@ -152,7 +180,12 @@ const Book = ({routes}) => {
                                                         value={gender}
                                                         onChange={handleChange}
                                                         disabled={isDisabled}
-                                                        style={isDisabled ? { cursor: 'not-allowed' } : {}}
+                                                        style={isDisabled ? 
+                                                            { cursor: 'not-allowed' } : 
+                                                            isPrimaryGuest ? 
+                                                                { backgroundColor: '#fff8e1', borderColor: '#ffc107', borderWidth: '2px' } : 
+                                                                {}
+                                                        }
                                                     >
                                                         <option value="">性別を選択</option>
                                                         <option value="男">男</option>

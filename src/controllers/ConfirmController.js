@@ -238,8 +238,8 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         setOpenCancelDialog(true); 
     }
     const handleConfirmCancel = () => {
-        setOpenCancelDialog(false); // Đóng Dialog xác nhận
-        navigate('/book'); // Chuyển hướng
+        setOpenCancelDialog(false);
+        navigate('/book');
     };
 
     return {
@@ -254,6 +254,7 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         handleConfirmCancel,
         openCancelDialog,
         totalCost,
+        setOpenCancelDialog
     }
 }
 
