@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 import ConfirmController from "../../../controllers/ConfirmController";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -20,6 +20,14 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
         handleConfirmCancel,
         openCancelDialog,
         totalCost,
+        otpDialogOpen,
+        setOtpDialogOpen,
+        otp,
+        setOtp,
+        otpList,
+        setOtpList,
+        handleVerifyOtp,
+        handleReservationClick
     } = ConfirmController(reservationData, busRoutes, setBusRoutes);
 
     const style = {
@@ -254,7 +262,7 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                                         <div className="col-lg-12">
                                             <div className="control-btn">
                                                 <button className="search-button" style={{marginBottom : '30px', width: 'fit-content'}}
-                                                    onClick={handleOpenPaypal}
+                                                    onClick={handleReservationClick}
                                                 >
                                                     予約
                                                 </button>
@@ -272,7 +280,33 @@ const Confirm = ({busRoutes, setBusRoutes }) => {
                         </div>
                     </div>
                 </div>
-            </div>          
+            </div>      
+            {/* Dialog OTP */}
+            <Dialog open={otpDialogOpen} onClose={() => setOtpDialogOpen(false)}>
+                <DialogTitle>メール認証</DialogTitle>
+                <DialogContent>
+                    {formData.email.slice(0, formData.guests).map((email, index) => (
+                        <div key={index} style={{ marginBottom: '10px' }}>
+                            <label>{email}</label>
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                placeholder="OTPを入力"
+                                value={otpList[index] || ''}
+                                onChange={(e) => {
+                                    const updatedList = [...otpList];
+                                    updatedList[index] = e.target.value;
+                                    setOtpList(updatedList);
+                                }}
+                            />
+                        </div>
+                    ))}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOtpDialogOpen(false)} color="secondary">キャンセル</Button>
+                    <Button onClick={handleVerifyOtp} color="primary">認証</Button>
+                </DialogActions>
+            </Dialog>
             {/* Dialog PayPal */}
             <Dialog 
                 open={paypalDialogOpen} 

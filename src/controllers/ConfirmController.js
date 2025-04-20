@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { createBooking } from "../models/BookModel";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
-
     useEffect(() => {
         document.title = '確認';
     })
@@ -12,6 +12,11 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
     const [paypalDialogOpen, setPaypalDialogOpen] = useState(false); 
     const [formData, setFormData] = useState(reservationData);
     const [openCancelDialog, setOpenCancelDialog] = useState(false);
+    const [otp, setOtp] = useState('');
+    const [otpDialogOpen, setOtpDialogOpen] = useState(false);
+    const [otpList, setOtpList] = useState([]);
+
+    const API_URL = process.env.REACT_APP_API_URL;
 
     // -------------予約フォーム----------------------
     useEffect(() => {
@@ -27,7 +32,6 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
 
         if (name === 'guests') {
             const guestsCount = parseInt(value) || 0;
-
 
             setFormData((prev) => {
                 const updatedNames = [...prev.name];
@@ -174,7 +178,8 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
 
     
     // ---------------------Paypal--------------------
-    const handleOpenPaypal = () => {
+
+    const validateFormData = () => {
         const { name, phone, guests, email, gender } = formData;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^\d{10,11}$/;
@@ -186,6 +191,7 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         const isGender = gender.every((g) => g.trim() !== '');
         const hasDuplicatePhones = new Set(phone).size !== phone.length;
         const hasDuplicateEmails = new Set(email).size !== email.length;
+    
         if (
             !isNameValid || 
             !isPhone ||           
@@ -217,11 +223,17 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
             } else if (hasDuplicateEmails) {
                 toast.error("メールアドレスが重複しています。"); 
             }
-            return;
+            return false;
         }
-        setPaypalDialogOpen(true); 
+    
+        return true;
     };
-        
+
+    const handleOpenPaypal = () => {
+        if (!validateFormData()) return;
+        setPaypalDialogOpen(true);
+    };
+    
     const handlePaypalClose = () => {
         setPaypalDialogOpen(false);
     }
@@ -242,6 +254,53 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         navigate('/book');
     };
 
+    // ------------------------------OTP---------------------------
+    const handleReservationClick = async () => {
+        if (!validateFormData()) return; // kiểm tra hợp lệ trước
+    
+        const validEmails = formData.email
+            .slice(0, formData.guests)
+            .filter(email => email.trim() !== '');
+    
+        try {
+            const response = await axios.post(`${API_URL}/api/reservation/send`, { emails: validEmails });
+            if (response.data) {
+                alert("OTPが送信されました。メールをご確認ください。");
+                setOtpList(validEmails.map(() => ''));
+                setOtpDialogOpen(true);
+            } else {
+                alert("OTPの送信に失敗しました。");
+            }
+        } catch (error) {
+            console.error("送信エラー:", error);
+            alert("OTP送信中にエラーが発生しました。");
+        }
+    };
+
+    const handleVerifyOtp = async () => {
+        const validEmails = formData.email.slice(0, formData.guests).filter(email => email.trim() !== '');
+    
+        const otpPairs = validEmails.map((email, index) => ({
+            email,
+            otp: otpList[index] || '',
+        }));
+    
+        try {
+            const response = await axios.post(`${API_URL}/api/reservation/verify`, { data: otpPairs });
+            if (response.data) {
+                alert("OTP認証成功");
+                setOtpDialogOpen(false);
+                handleOpenPaypal(); 
+            } else {
+                alert("OTPが正しくありません。");
+            }
+        } catch (error) {
+            console.error("認証エラー:", error);
+            alert("OTPが正しくありません。");
+        }
+    };
+
+
     return {
         calculateTravelTime,
         handleChange,
@@ -254,7 +313,15 @@ const ConfirmController = (reservationData, busRoutes, setBusRoutes) => {
         handleConfirmCancel,
         openCancelDialog,
         totalCost,
-        setOpenCancelDialog
+        setOpenCancelDialog,
+        otpDialogOpen,
+        setOtpDialogOpen,
+        otp,
+        setOtp,
+        otpList,
+        setOtpList,
+        handleVerifyOtp,
+        handleReservationClick
     }
 }
 
